@@ -141,3 +141,21 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Dependencias
+node_modules/
+
+# Variables de entorno (¡NUNCA subir contraseñas!)
+.env
+.env.local
+
+# Compilados
+dist/
+build/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
