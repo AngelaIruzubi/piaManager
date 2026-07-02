@@ -6,14 +6,6 @@ import {
 import { Pai } from './Pai';
 import { Objetivo } from './Objetivo';
 
-export enum TipoArea {
-  AUTONOMIA = 'autonomia',
-  COGNITIVA = 'cognitiva',
-  SOCIAL = 'social',
-  OCUPACIONAL = 'ocupacional',
-  SALUD = 'salud',
-}
-
 @Entity('areas')
 export class Area {
   @PrimaryGeneratedColumn()
@@ -23,8 +15,8 @@ export class Area {
   @JoinColumn({ name: 'pai_id' })
   pai: Pai;
 
-  @Column({ type: 'enum', enum: TipoArea })
-  tipo: TipoArea;
+  @Column({ length: 50 })
+  tipo: string;
 
   @Column({ type: 'text', nullable: true })
   observaciones: string;

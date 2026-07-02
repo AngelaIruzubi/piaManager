@@ -7,12 +7,6 @@ import { Persona } from './Persona';
 import { Usuario } from './Usuario';
 import { Area } from './Area';
 
-export enum EstadoPai {
-  BORRADOR = 'borrador',
-  ACTIVO = 'activo',
-  CERRADO = 'cerrado',
-}
-
 @Entity('pai')
 export class Pai {
   @PrimaryGeneratedColumn()
@@ -31,8 +25,8 @@ export class Pai {
   @Column({ type: 'date', nullable: true })
   fecha_revision: Date;
 
-  @Column({ type: 'enum', enum: EstadoPai, default: EstadoPai.BORRADOR })
-  estado: EstadoPai;
+  @Column({ length: 50, default: 'borrador' })
+  estado: string;
 
   @Column({ type: 'text', nullable: true })
   observaciones_generales: string;

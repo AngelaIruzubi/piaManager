@@ -7,19 +7,6 @@ import { Area } from './Area';
 import { Medio } from './Medio';
 import { Seguimiento } from './Seguimiento';
 
-export enum PlazoObjetivo {
-  CORTO = 'corto',
-  MEDIO = 'medio',
-  LARGO = 'largo',
-}
-
-export enum EstadoObjetivo {
-  PENDIENTE = 'pendiente',
-  EN_PROCESO = 'en_proceso',
-  CONSEGUIDO = 'conseguido',
-  NO_TRABAJADO = 'no_trabajado',
-}
-
 @Entity('objetivos')
 export class Objetivo {
   @PrimaryGeneratedColumn()
@@ -32,11 +19,11 @@ export class Objetivo {
   @Column({ type: 'text' })
   descripcion: string;
 
-  @Column({ type: 'enum', enum: PlazoObjetivo })
-  plazo: PlazoObjetivo;
+  @Column({ length: 50 })
+  plazo: string;
 
-  @Column({ type: 'enum', enum: EstadoObjetivo, default: EstadoObjetivo.PENDIENTE })
-  estado: EstadoObjetivo;
+  @Column({ length: 50, default: 'pendiente' })
+  estado: string;
 
   @Column({ type: 'date', nullable: true })
   fecha_inicio: Date;

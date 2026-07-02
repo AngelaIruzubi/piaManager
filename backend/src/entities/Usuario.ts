@@ -1,9 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
-export enum RolUsuario {
-  EDUCADOR = 'educador',
-  COORDINADOR = 'coordinador',
-}
+import {
+  Entity, PrimaryGeneratedColumn, Column,
+  CreateDateColumn, UpdateDateColumn
+} from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -22,11 +20,17 @@ export class Usuario {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: RolUsuario })
-  rol: RolUsuario;
+  @Column({ length: 50 })
+  rol: string;
 
   @Column({ default: true })
   activo: boolean;
+
+  @Column({ type: 'date', nullable: true })
+  fecha_alta: Date;
+
+  @Column({ type: 'date', nullable: true })
+  fecha_baja: Date;
 
   @CreateDateColumn()
   created_at: Date;

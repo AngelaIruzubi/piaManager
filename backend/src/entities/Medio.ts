@@ -5,13 +5,6 @@ import {
 } from 'typeorm';
 import { Objetivo } from './Objetivo';
 
-export enum TipoMedio {
-  MATERIAL = 'material',
-  PERSONA_APOYO = 'persona_apoyo',
-  TECNICA = 'tecnica',
-  ADAPTACION_ENTORNO = 'adaptacion_entorno',
-}
-
 @Entity('medios')
 export class Medio {
   @PrimaryGeneratedColumn()
@@ -21,8 +14,8 @@ export class Medio {
   @JoinColumn({ name: 'objetivo_id' })
   objetivo: Objetivo;
 
-  @Column({ type: 'enum', enum: TipoMedio })
-  tipo: TipoMedio;
+  @Column({ length: 50 })
+  tipo: string;
 
   @Column({ type: 'text' })
   descripcion: string;
