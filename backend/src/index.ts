@@ -1,14 +1,21 @@
 import 'reflect-metadata';
-import express from 'express';
 import dotenv from 'dotenv';
-import { AppDataSource } from './config/database';
-
 dotenv.config();
+
+import express from 'express';
+import { AppDataSource } from './config/database';
+ import authRoutes from './routes/auth.routes';  
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.post('/test', (req, res) => {
+  res.json({ mensaje: 'funciona' });
+});
+
+ app.use('/api/auth', authRoutes);  
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'PIA Manager API funcionando 🚀' });
@@ -24,3 +31,5 @@ AppDataSource.initialize()
   .catch((error) => {
     console.error('❌ Error al conectar con la base de datos:', error);
   });
+
+process.stdin.resume();

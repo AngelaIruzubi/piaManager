@@ -1,3 +1,4 @@
+//Aqui esta la lógica del registro y la concexión con la bbdd
 import bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
