@@ -5,7 +5,9 @@ dotenv.config();
 import express from 'express';
 import { AppDataSource } from './config/database';
 import authRoutes from './routes/auth.routes'; 
-import personasRoutes from './routes/personas.routes'; 
+import personasRoutes from './routes/personas.routes';
+import paiRoutes from './routes/pai.routes'; 
+import objetivoRoutes from './routes/objetivo.routes';
  
 
 const app = express();
@@ -13,6 +15,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use('/api/personas', personasRoutes);
+app.use('/api/personas/:personaId/pai', paiRoutes);
+app.use('/api/pai', paiRoutes);
+app.use('/api/areas/:areaId/objetivos', objetivoRoutes);
+app.use('/api/objetivos', objetivoRoutes);
 
 app.post('/test', (req, res) => {
   res.json({ mensaje: 'funciona' });
