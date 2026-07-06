@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import personasRoutes from './routes/personas.routes';
 import paiRoutes from './routes/pai.routes'; 
 import objetivoRoutes from './routes/objetivo.routes';
+import medioRoutes from './routes/medio.routes';
  
 
 const app = express();
@@ -19,6 +20,8 @@ app.use('/api/personas/:personaId/pai', paiRoutes);
 app.use('/api/pai', paiRoutes);
 app.use('/api/areas/:areaId/objetivos', objetivoRoutes);
 app.use('/api/objetivos', objetivoRoutes);
+app.use('/api/objetivos/:objetivoId/medios', medioRoutes);
+app.use('/api/medios', medioRoutes);
 
 app.post('/test', (req, res) => {
   res.json({ mensaje: 'funciona' });
