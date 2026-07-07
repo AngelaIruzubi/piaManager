@@ -1,5 +1,7 @@
 import { AppDataSource } from './database';
 import { Catalogo } from '../entities/Catalogo';
+import { Usuario } from '../entities/Usuario';
+import bcrypt from 'bcryptjs';
 
 const datos = [
   // Roles
@@ -28,16 +30,35 @@ const datos = [
 ];
 
 AppDataSource.initialize().then(async () => {
-  const repo = AppDataSource.getRepository(Catalogo);
 
+  // Catálogos
+  const catalogoRepo = AppDataSource.getRepository(Catalogo);
   for (const dato of datos) {
-    const existe = await repo.findOneBy({ tipo: dato.tipo, codigo: dato.codigo });
+    const existe = await catalogoRepo.findOneBy({ tipo: dato.tipo, codigo: dato.codigo });
     if (!existe) {
-      await repo.save(repo.create(dato));
-      console.log(`✅ Insertado: ${dato.tipo} - ${dato.codigo}`);
+      await catalogoRepo.save(catalogoRepo.create(dato));
+      console.log(`✅ Catálogo: ${dato.tipo} - ${dato.codigo}`);
     } else {
       console.log(`⏭️  Ya existe: ${dato.tipo} - ${dato.codigo}`);
     }
+  }
+
+  // Coordinadora inicial
+  const usuarioRepo = AppDataSource.getRepository(Usuario);
+  const admin = await usuarioRepo.findOneBy({ email: 'admin@pia.com' });
+  if (!admin) {
+    const hash = await bcrypt.hash('admin123', 10);
+    await usuarioRepo.save(usuarioRepo.create({
+      nombre: 'Coordinadora',
+      apellidos: 'Principal',
+      email: 'admin@pia.com',
+      password: hash,
+      rol: 'coordinador',
+      activo: true,
+    }));
+    console.log('✅ Coordinadora inicial creada: admin@pia.com / admin123');
+  } else {
+    console.log('⏭️  Coordinadora ya existe');
   }
 
   console.log('🎉 Seed completado');

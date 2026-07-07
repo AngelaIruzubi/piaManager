@@ -5,7 +5,7 @@ import { authMiddleware, RequestConUsuario } from '../middlewares/auth.middlewar
 const router = Router();
 
 // Rutas públicas — no necesitan token
-router.post('/register', authController.register);
+
 router.post('/login', authController.login);
 
 // Ruta protegida de prueba — necesita token
