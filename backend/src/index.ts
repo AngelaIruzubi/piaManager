@@ -11,6 +11,7 @@ import objetivoRoutes from './routes/objetivo.routes';
 import medioRoutes from './routes/medio.routes';
 
 import seguimientoRoutes from './routes/seguimiento.routes';
+import asignacionRoutes from './routes/asignacion.routes';
 
 
  
@@ -28,6 +29,8 @@ app.use('/api/objetivos/:objetivoId/medios', medioRoutes);
 app.use('/api/medios', medioRoutes);
 app.use('/api/objetivos/:objetivoId/seguimientos', seguimientoRoutes);
 app.use('/api/seguimientos', seguimientoRoutes);
+app.use('/api/personas/:personaId/asignaciones', asignacionRoutes);
+app.use('/api/asignaciones', asignacionRoutes);
 
 
 app.post('/test', (req, res) => {
