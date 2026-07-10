@@ -1,1 +1,48 @@
-<p>lista-personas works!</p>
+<div class="lista-container">
+  <div class="cabecera">
+    <h2>Personas</h2>
+  </div>
+
+  <div *ngIf="cargando" class="cargando">
+    Cargando...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!cargando && !error">
+    <div *ngIf="personas.length === 0" class="vacio">
+      No hay personas registradas.
+    </div>
+
+    <div class="tabla-container" *ngIf="personas.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tutor legal</th>
+            <th>Teléfono</th>
+            <th>Educador de referencia</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let persona of personas" (click)="verFicha(persona.id)">
+            <td>{{ nombreCompleto(persona) }}</td>
+            <td>{{ persona.tutor_legal }}</td>
+            <td>{{ persona.telefono_contacto }}</td>
+            <td>{{ persona.profesional_referencia?.nombre }} {{ persona.profesional_referencia?.apellidos }}</td>
+            <td>
+              <span class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
+                {{ persona.activo ? 'Activo' : 'Baja' }}
+              </span>
+            </td>
+            <td>→</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

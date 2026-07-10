@@ -1,1 +1,23 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="estaAutenticado(); else soloContenido">
+  <nav class="navbar">
+    <div class="navbar-brand">PIA Manager</div>
+    <div class="navbar-info" *ngIf="usuario$ | async as usuario">
+      {{ usuario.nombre }} — {{ usuario.rol }}
+    </div>
+    <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+  </nav>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <a routerLink="/personas" routerLinkActive="activo">Personas</a>
+      <a routerLink="/usuarios" routerLinkActive="activo" *ngIf="esCoordinador()">Usuarios</a>
+    </aside>
+    <main class="contenido">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</ng-container>
+
+<ng-template #soloContenido>
+  <router-outlet></router-outlet>
+</ng-template>
