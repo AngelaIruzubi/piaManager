@@ -1,0 +1,32 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>PIA Manager</h1>
+    <p>Centro de día — Panel de gestión</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="campo">
+        <label>Email</label>
+        <input type="email" formControlName="email" />
+        <span class="error" *ngIf="emailControl?.invalid && emailControl?.touched">
+          Email no válido
+        </span>
+      </div>
+
+      <div class="campo">
+        <label>Contraseña</label>
+        <input type="password" formControlName="password" />
+        <span class="error" *ngIf="passwordControl?.invalid && passwordControl?.touched">
+          Mínimo 6 caracteres
+        </span>
+      </div>
+
+      <div class="error-general" *ngIf="error">{{ error }}</div>
+
+      <button type="submit" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+    </form>
+  </div>
+</div>
