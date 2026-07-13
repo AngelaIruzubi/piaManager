@@ -1,1 +1,59 @@
-<p>vista-pai works!</p>
+<div class="pai-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <div *ngIf="cargando" class="cargando">Cargando PAI...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!pai && !cargando && !error" class="vacio">
+    No hay ningún PAI registrado para esta persona.
+  </div>
+
+  <div *ngIf="pai && !cargando">
+
+    <div class="cabecera">
+      <h2>PAI {{ pai.anio }}</h2>
+      <span class="badge-estado" [style.background]="getColorEstadoPai(pai.estado)">
+        {{ pai.estado }}
+      </span>
+    </div>
+
+    <div *ngIf="pai.observaciones_generales" class="observaciones">
+      {{ pai.observaciones_generales }}
+    </div>
+
+    <div class="areas" *ngIf="pai.areas">
+      <div class="area-card" *ngFor="let area of pai.areas">
+
+        <div class="area-header">
+          <h3>{{ area.tipo | titlecase }}</h3>
+          <div class="progreso">
+            <div class="progreso-barra">
+              <div class="progreso-fill" [style.width.%]="calcularProgreso(area)"></div>
+            </div>
+            <span>{{ calcularProgreso(area) }}%</span>
+          </div>
+        </div>
+
+        <div class="objetivos" *ngIf="area.objetivos && area.objetivos.length > 0">
+          <div class="objetivo-item" *ngFor="let objetivo of area.objetivos"
+               [style.border-left-color]="getColorEstado(objetivo.estado)">
+            <div class="objetivo-desc">{{ objetivo.descripcion }}</div>
+            <div class="objetivo-meta">
+              <span class="plazo">{{ objetivo.plazo }}</span>
+              <span class="estado-badge" [style.background]="getColorEstado(objetivo.estado)">
+                {{ objetivo.estado | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!area.objetivos || area.objetivos.length === 0" class="sin-objetivos">
+          Sin objetivos definidos
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
