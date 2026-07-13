@@ -1,1 +1,48 @@
-<p>ficha-persona works!</p>
+<div class="ficha-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <div *ngIf="cargando" class="cargando">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="persona && !cargando">
+    <div class="cabecera">
+      <h2>{{ persona.nombre }} {{ persona.apellidos }}</h2>
+      <span class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
+        {{ persona.activo ? 'Activo' : 'Baja' }}
+      </span>
+    </div>
+
+    <div class="datos">
+      <div class="dato">
+        <span class="etiqueta">Fecha de nacimiento</span>
+        <span>{{ persona.fecha_nacimiento | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">Tutor legal</span>
+        <span>{{ persona.tutor_legal }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">Teléfono de contacto</span>
+        <span>{{ persona.telefono_contacto }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">Educador de referencia</span>
+        <span>{{ persona.profesional_referencia?.nombre }} {{ persona.profesional_referencia?.apellidos }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">Fecha de alta</span>
+        <span>{{ persona.fecha_alta | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="dato" *ngIf="persona.fecha_baja">
+        <span class="etiqueta">Fecha de baja</span>
+        <span>{{ persona.fecha_baja | date:'dd/MM/yyyy' }}</span>
+      </div>
+    </div>
+
+    <button class="btn-pai" (click)="verPai()">
+      Ver PAI →
+    </button>
+  </div>
+
+</div>

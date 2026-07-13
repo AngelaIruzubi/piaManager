@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
@@ -15,6 +15,7 @@ export class ListaPersonas implements OnInit {
 
   private personasService = inject(PersonasService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   personas: Persona[] = [];
   cargando = true;
@@ -25,10 +26,12 @@ export class ListaPersonas implements OnInit {
       next: (data: Persona[]) => {
         this.personas = data;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: (err: any) => {
         this.error = 'Error al cargar las personas';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
