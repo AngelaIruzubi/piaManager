@@ -1,1 +1,46 @@
-<p>lista-usuarios works!</p>
+<div class="lista-container">
+  <div class="cabecera">
+    <h2>Usuarios</h2>
+  </div>
+
+  <div *ngIf="cargando" class="cargando">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div class="tabla-container" *ngIf="!cargando && !error">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <span class="badge-rol" [class.coordinador]="usuario.rol === 'coordinador'">
+              {{ usuario.rol }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [class.activo]="usuario.activo" [class.baja]="!usuario.activo">
+              {{ usuario.activo ? 'Activo' : 'Baja' }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn-baja"
+              *ngIf="usuario.activo"
+              (click)="darDeBaja(usuario.id)">
+              Dar de baja
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
