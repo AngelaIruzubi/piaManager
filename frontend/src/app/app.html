@@ -9,8 +9,8 @@
 
   <div class="layout">
     <aside class="sidebar">
-      <a routerLink="/personas" routerLinkActive="activo">Personas</a>
-      <a routerLink="/usuarios" routerLinkActive="activo" *ngIf="esCoordinador()">Usuarios</a>
+      <a routerLink="/personas" routerLinkActive="activo">Usuarios</a>
+      <a routerLink="/usuarios" routerLinkActive="activo" *ngIf="esCoordinador()">Educadores</a>
     </aside>
     <main class="contenido">
       <router-outlet></router-outlet>

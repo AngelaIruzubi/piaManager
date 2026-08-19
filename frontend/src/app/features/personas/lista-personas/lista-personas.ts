@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 
@@ -19,6 +20,9 @@ export class ListaPersonas implements OnInit {
   private personasService = inject(PersonasService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
+
+  esCoordinador = this.authService.esCoordinador();
 
   personas: Persona[] = [];
   cargando = true;

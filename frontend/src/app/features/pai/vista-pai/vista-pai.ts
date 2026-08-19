@@ -70,4 +70,7 @@ export class VistaPai implements OnInit {
     const conseguidos = area.objetivos.filter((o: any) => o.estado === 'conseguido').length;
     return Math.round((conseguidos / area.objetivos.length) * 100);
   }
+  crearPai() {
+  this.router.navigate(['/personas', this.personaId, 'pai', 'nuevo']);
+}
 }

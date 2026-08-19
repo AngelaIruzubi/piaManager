@@ -1,6 +1,9 @@
 <div class="pai-container">
 
+  <div class="cabecera-acciones">
   <button class="btn-volver" (click)="volver()">← Volver</button>
+  <button class="btn-nuevo" (click)="crearPai()" *ngIf="!pai">+ Crear PAI</button>
+</div>
 
   <div *ngIf="cargando" class="cargando">Cargando PAI...</div>
   <div *ngIf="error" class="error">{{ error }}</div>

@@ -144,3 +144,19 @@
   background: #fff5f5;
   border-radius: 4px;
 }
+.cabecera-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-nuevo {
+  background: #1F5C99;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover { background: #2E75B6; }
+}

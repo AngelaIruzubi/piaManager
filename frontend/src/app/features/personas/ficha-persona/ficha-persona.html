@@ -10,8 +10,8 @@
       <span class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
         {{ persona.activo ? 'Activo' : 'Baja' }}
       </span>
-      <button class="btn-editar" (click)="editar()">Editar</button>
-      <button class="btn-baja" *ngIf="persona.activo" (click)="darDeBaja()">
+      <button class="btn-editar" *ngIf="esCoordinador" (click)="editar()">Editar</button>
+      <button class="btn-baja" *ngIf="esCoordinador && persona.activo" (click)="darDeBaja()">
         Dar de baja
       </button>
     </div>

@@ -1,7 +1,7 @@
 <div class="lista-container">
   <div class="cabecera">
-    <h2>Personas</h2>
-    <button class="btn-nuevo" routerLink="/personas/nueva">+ Nueva persona</button>
+    <h2>Usuarios</h2>
+    <button class="btn-nuevo" *ngIf="esCoordinador" routerLink="/personas/nueva">+ Nuevo usuario</button>
   </div>
 
   <div *ngIf="cargando" class="cargando">

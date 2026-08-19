@@ -1,0 +1,40 @@
+<div class="form-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <h2>Nuevo PAI</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Año *</label>
+        <input type="number" formControlName="anio" />
+      </div>
+      <div class="campo">
+        <label>Fecha de inicio *</label>
+        <input type="date" formControlName="fecha_inicio" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Fecha de revisión</label>
+      <input type="date" formControlName="fecha_revision" />
+    </div>
+
+    <div class="campo">
+      <label>Observaciones generales</label>
+      <textarea formControlName="observaciones_generales" rows="4"></textarea>
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Creando...' : 'Crear PAI' }}
+      </button>
+    </div>
+
+  </form>
+</div>

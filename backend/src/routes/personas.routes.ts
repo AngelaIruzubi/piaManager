@@ -8,7 +8,7 @@ const router = Router();
 // Ambos roles
 router.get('/', authMiddleware, personasController.getAll);
 router.get('/:id', authMiddleware, personasController.getById);
-router.put('/:id', authMiddleware, personasController.actualizar);
+router.put('/:id', authMiddleware, soloCoordinador, personasController.actualizar);
 
 // Solo coordinador
 router.post('/', authMiddleware, soloCoordinador, personasController.crear);

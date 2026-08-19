@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 
@@ -19,6 +20,9 @@ export class FichaPersona implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
+
+  esCoordinador = this.authService.esCoordinador();
 
   persona: Persona | null = null;
   cargando = true;

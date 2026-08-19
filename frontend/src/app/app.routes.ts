@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'personas/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, coordinadorGuard],
     loadComponent: () =>
       import('./features/personas/form-persona/form-persona')
       .then(m => m.FormPersona)
@@ -40,6 +40,13 @@ export const routes: Routes = [
       import('./features/personas/ficha-persona/ficha-persona')
       .then(m => m.FichaPersona)
   },
+  {
+  path: 'personas/:id/pai/nuevo',
+  canActivate: [authGuard, coordinadorGuard],
+  loadComponent: () =>
+    import('./features/pai/form-pai/form-pai')
+    .then(m => m.FormPai)
+},
   {
     path: 'personas/:id/pai',
     canActivate: [authGuard],
