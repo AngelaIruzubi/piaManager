@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
+import { RouterLink } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-lista-personas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './lista-personas.html',
   styleUrl: './lista-personas.scss'
 })

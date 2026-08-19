@@ -74,3 +74,14 @@ table {
     color: #9B2C2C;
   }
 }
+.btn-nuevo {
+  background: #1F5C99;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover { background: #2E75B6; }
+}

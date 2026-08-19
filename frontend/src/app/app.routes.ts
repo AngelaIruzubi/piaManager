@@ -20,6 +20,20 @@ export const routes: Routes = [
       .then(m => m.ListaPersonas)
   },
   {
+    path: 'personas/nueva',
+    canActivate: [authGuard, coordinadorGuard],
+    loadComponent: () =>
+      import('./features/personas/form-persona/form-persona')
+      .then(m => m.FormPersona)
+  },
+  {
+    path: 'personas/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/personas/form-persona/form-persona')
+      .then(m => m.FormPersona)
+  },
+  {
     path: 'personas/:id',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -42,8 +56,15 @@ export const routes: Routes = [
       import('./features/usuarios/lista-usuarios/lista-usuarios')
       .then(m => m.ListaUsuarios)
   },
+  {
+    path: 'usuarios/nuevo',
+    canActivate: [authGuard, coordinadorGuard],
+    loadComponent: () =>
+      import('./features/usuarios/form-usuario/form-usuario')
+      .then(m => m.FormUsuario)
+  },
 
   // Redirecciones
   { path: '', redirectTo: 'personas', pathMatch: 'full' },
-  { path: '**', redirectTo: 'personas' }
+  { path: '**', redirectTo: 'personas' },
 ];

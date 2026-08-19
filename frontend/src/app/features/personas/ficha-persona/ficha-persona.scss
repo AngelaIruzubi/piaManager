@@ -75,3 +75,30 @@
 }
 
 .error { color: #e53e3e; }
+.acciones-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-editar {
+  background: white;
+  border: 1px solid #1F5C99;
+  color: #1F5C99;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover { background: #EEF4FB; }
+}
+.btn-baja {
+  background: #FED7D7;
+  color: #9B2C2C;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  &:hover { background: #FEB2B2; }
+}

@@ -13,6 +13,10 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.apiUrl);
   }
 
+  getEducadores() {
+    return this.http.get<Pick<Usuario, 'id' | 'nombre' | 'apellidos'>[]>(`${this.apiUrl}/educadores`);
+  }
+
   getById(id: number) {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }

@@ -1,0 +1,41 @@
+<div class="form-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <h2>Nuevo usuario</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Nombre *</label>
+        <input type="text" formControlName="nombre" />
+      </div>
+      <div class="campo">
+        <label>Apellidos *</label>
+        <input type="text" formControlName="apellidos" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Email *</label>
+      <input type="email" formControlName="email" />
+    </div>
+
+    <div class="campo">
+      <label>Contraseña *</label>
+      <input type="password" formControlName="password" />
+      <small>Mínimo 6 caracteres</small>
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Creando...' : 'Crear usuario' }}
+      </button>
+    </div>
+
+  </form>
+</div>

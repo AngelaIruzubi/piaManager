@@ -1,0 +1,62 @@
+<div class="form-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <h2>{{ esEdicion ? 'Editar persona' : 'Nueva persona' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Nombre *</label>
+        <input type="text" formControlName="nombre" />
+      </div>
+      <div class="campo">
+        <label>Apellidos *</label>
+        <input type="text" formControlName="apellidos" />
+      </div>
+    </div>
+
+    <div class="fila">
+      <div class="campo">
+        <label>Fecha de nacimiento *</label>
+        <input type="date" formControlName="fecha_nacimiento" />
+      </div>
+      <div class="campo">
+        <label>Fecha de alta *</label>
+        <input type="date" formControlName="fecha_alta" />
+      </div>
+    </div>
+
+    <div class="fila">
+      <div class="campo">
+        <label>Tutor legal *</label>
+        <input type="text" formControlName="tutor_legal" />
+      </div>
+      <div class="campo">
+        <label>Teléfono de contacto *</label>
+        <input type="text" formControlName="telefono_contacto" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Educador de referencia *</label>
+      <select formControlName="profesional_referencia_id">
+        <option value="">Selecciona un educador</option>
+        <option *ngFor="let educador of educadores" [value]="educador.id">
+          {{ educador.nombre }} {{ educador.apellidos }}
+        </option>
+      </select>
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear persona') }}
+      </button>
+    </div>
+
+  </form>
+</div>

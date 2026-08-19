@@ -2,11 +2,13 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-lista-usuarios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './lista-usuarios.html',
   styleUrl: './lista-usuarios.scss'
 })
@@ -44,8 +46,8 @@ export class ListaUsuarios implements OnInit {
         );
         this.cdr.detectChanges();
       },
-      error: (_err: any) => {
-        alert('Error al dar de baja al usuario');
+      error: (err: any) => {
+        alert(err?.error?.mensaje || 'Error al dar de baja al usuario');
       }
     });
   }

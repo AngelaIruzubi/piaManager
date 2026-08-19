@@ -6,11 +6,14 @@
   <div *ngIf="error" class="error">{{ error }}</div>
 
   <div *ngIf="persona && !cargando">
-    <div class="cabecera">
-      <h2>{{ persona.nombre }} {{ persona.apellidos }}</h2>
+    <div class="acciones-cabecera">
       <span class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
         {{ persona.activo ? 'Activo' : 'Baja' }}
       </span>
+      <button class="btn-editar" (click)="editar()">Editar</button>
+      <button class="btn-baja" *ngIf="persona.activo" (click)="darDeBaja()">
+        Dar de baja
+      </button>
     </div>
 
     <div class="datos">

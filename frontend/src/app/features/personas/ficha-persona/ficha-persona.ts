@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
 
+
+
 @Component({
   selector: 'app-ficha-persona',
   standalone: true,
@@ -45,5 +47,21 @@ export class FichaPersona implements OnInit {
 
   volver() {
     this.router.navigate(['/personas']);
+  }
+  editar() {
+  this.router.navigate(['/personas', this.persona?.id, 'editar']);
+  }
+  darDeBaja() {
+    if (!confirm('¿Estás segura de que quieres dar de baja a esta persona?')) return;
+
+    this.personasService.darDeBaja(this.persona!.id).subscribe({
+      next: (data: any) => {
+        this.persona = data;
+        this.cdr.detectChanges();
+      },
+      error: (_err: any) => {
+        alert('Error al dar de baja a la persona');
+      }
+    });
   }
 }

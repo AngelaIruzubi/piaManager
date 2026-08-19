@@ -5,6 +5,9 @@ import { soloCoordinador } from '../middlewares/roles.middleware';
 
 const router = Router();
 
+// Accesible para cualquier usuario autenticado (selector de educador en personas)
+router.get('/educadores', authMiddleware, usuarioController.getEducadores);
+
 // Todo solo para coordinadores
 router.get('/', authMiddleware, soloCoordinador, usuarioController.getAll);
 router.get('/:id', authMiddleware, soloCoordinador, usuarioController.getById);

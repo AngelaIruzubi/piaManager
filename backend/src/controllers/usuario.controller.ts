@@ -13,6 +13,15 @@ export const usuarioController = {
     }
   },
 
+  async getEducadores(req: RequestConUsuario, res: Response) {
+    try {
+      const result = await usuarioService.getEducadores();
+      res.json(result);
+    } catch (e: any) {
+      res.status(400).json({ mensaje: e.message });
+    }
+  },
+
   async getById(req: RequestConUsuario, res: Response) {
     try {
       const result = await usuarioService.getById(Number(req.params.id));

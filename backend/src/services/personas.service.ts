@@ -46,7 +46,11 @@ export const personasService = {
   async actualizar(id: number, data: ActualizarPersonaDto) {
     const persona = await repo.findOneBy({ id });
     if (!persona) throw new Error('Persona no encontrada');
-    Object.assign(persona, data);
+    const { profesional_referencia_id, ...resto } = data;
+    Object.assign(persona, resto);
+    if (profesional_referencia_id !== undefined) {
+      persona.profesional_referencia = { id: profesional_referencia_id } as any;
+    }
     return await repo.save(persona);
   },
 
