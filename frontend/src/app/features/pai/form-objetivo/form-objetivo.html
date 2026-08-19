@@ -1,0 +1,45 @@
+<div class="form-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <h2>{{ esEdicion ? 'Editar objetivo' : 'Nuevo objetivo' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="campo">
+      <label>Descripción *</label>
+      <textarea formControlName="descripcion" rows="3"
+        placeholder="Ej: Se viste sola con supervisión mínima"></textarea>
+    </div>
+
+    <div class="fila">
+      <div class="campo">
+        <label>Plazo *</label>
+        <select formControlName="plazo">
+          <option *ngFor="let p of plazos" [value]="p">
+            {{ p | titlecase }}
+          </option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Fecha prevista</label>
+        <input type="date" formControlName="fecha_prevista" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Fecha de inicio</label>
+      <input type="date" formControlName="fecha_inicio" />
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear objetivo') }}
+      </button>
+    </div>
+
+  </form>
+</div>

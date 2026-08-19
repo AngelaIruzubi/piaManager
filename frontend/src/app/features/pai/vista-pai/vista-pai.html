@@ -38,18 +38,24 @@
           </div>
         </div>
 
-        <div class="objetivos" *ngIf="area.objetivos && area.objetivos.length > 0">
-          <div class="objetivo-item" *ngFor="let objetivo of area.objetivos"
-               [style.border-left-color]="getColorEstado(objetivo.estado)">
-            <div class="objetivo-desc">{{ objetivo.descripcion }}</div>
-            <div class="objetivo-meta">
-              <span class="plazo">{{ objetivo.plazo }}</span>
-              <span class="estado-badge" [style.background]="getColorEstado(objetivo.estado)">
-                {{ objetivo.estado | titlecase }}
-              </span>
-            </div>
+        <div class="objetivo-item" *ngFor="let objetivo of area.objetivos"
+            [style.border-left-color]="getColorEstado(objetivo.estado)">
+          <div class="objetivo-desc">{{ objetivo.descripcion }}</div>
+          <div class="objetivo-meta">
+            <span class="plazo">{{ objetivo.plazo }}</span>
+            <span class="estado-badge" [style.background]="getColorEstado(objetivo.estado)">
+              {{ objetivo.estado | titlecase }}
+            </span>
+            <button class="btn-mini" (click)="editarObjetivo(objetivo.id)">Editar</button>
+            <button class="btn-mini btn-estado" (click)="cambiarEstado(objetivo)">
+              Cambiar estado
+            </button>
           </div>
         </div>
+
+        <button class="btn-add-objetivo" (click)="addObjetivo(area.id)">
+          + Añadir objetivo
+        </button>
 
         <div *ngIf="!area.objetivos || area.objetivos.length === 0" class="sin-objetivos">
           Sin objetivos definidos

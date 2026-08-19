@@ -10,14 +10,21 @@ const AREAS_FIJAS = [
   'autonomia', 'cognitiva', 'social', 'ocupacional', 'salud'
 ];
 
+function sinPasswordCreador(pai: Pai) {
+  if (!pai.creado_por) return pai;
+  const { password, ...creado_por } = pai.creado_por as any;
+  return { ...pai, creado_por };
+}
+
 export const paiService = {
 
   async getByPersona(personaId: number) {
-    return await paiRepo.find({
+    const pais = await paiRepo.find({
       where: { persona: { id: personaId } },
-      relations: { persona: true, areas: true, creado_por: true },
+      relations: { persona: true, areas: { objetivos: true }, creado_por: true },
       order: { anio: 'DESC' }
     });
+    return pais.map(sinPasswordCreador);
   },
 
   async getById(id: number) {
@@ -26,7 +33,7 @@ export const paiService = {
       relations: { persona: true, areas: { objetivos: true }, creado_por: true }
     });
     if (!pai) throw new Error('PAI no encontrado');
-    return pai;
+    return sinPasswordCreador(pai);
   },
 
   async crear(personaId: number, data: CrearPaiDto, creadoPorId: number) {

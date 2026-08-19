@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaiService } from '../../../core/services/pai.service';
 import { Pai } from '../../../shared/models/pai.model';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-vista-pai',
@@ -19,6 +21,7 @@ export class VistaPai implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   pai: Pai | null = null;
+  private http = inject(HttpClient);
   personaId: number = 0;
   cargando = true;
   error = '';
@@ -73,4 +76,32 @@ export class VistaPai implements OnInit {
   crearPai() {
   this.router.navigate(['/personas', this.personaId, 'pai', 'nuevo']);
 }
+
+  addObjetivo(areaId: number) {
+    this.router.navigate(['/areas', areaId, 'objetivos', 'nuevo']);
+  }
+
+  editarObjetivo(objetivoId: number) {
+    this.router.navigate(['/objetivos', objetivoId, 'editar']);
+  }
+
+  cambiarEstado(objetivo: any) {
+    const estados = ['pendiente', 'en_proceso', 'conseguido', 'no_trabajado'];
+    const actual = estados.indexOf(objetivo.estado);
+    const siguiente = estados[(actual + 1) % estados.length];
+
+    if (!confirm(`¿Cambiar estado a "${siguiente}"?`)) return;
+
+    this.http.patch(`http://localhost:3000/api/objetivos/${objetivo.id}/estado`,
+      { estado: siguiente }
+    ).subscribe({
+      next: () => {
+        objetivo.estado = siguiente;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        alert(err.error?.mensaje || 'Error al cambiar estado');
+      }
+    });
+  }
 }

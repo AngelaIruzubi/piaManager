@@ -4,19 +4,27 @@ import { CrearPersonaDto, ActualizarPersonaDto } from '../dtos/personas.dto';
 
 const repo = AppDataSource.getRepository(Persona);
 
+function sinPasswordReferencia(persona: Persona) {
+  if (!persona.profesional_referencia) return persona;
+  const { password, ...profesional_referencia } = persona.profesional_referencia as any;
+  return { ...persona, profesional_referencia };
+}
+
 export const personasService = {
 
     async getAll(usuarioId: number, rol: string) {
     if (rol === 'coordinador') {
-        return await repo.find({
+        const personas = await repo.find({
         where: { activo: true },
         relations: { profesional_referencia: true }
         });
+        return personas.map(sinPasswordReferencia);
     }
-    return await repo.find({
+    const personas = await repo.find({
         where: { profesional_referencia: { id: usuarioId }, activo: true },
         relations: { profesional_referencia: true }
     });
+    return personas.map(sinPasswordReferencia);
     },
 
     async getById(id: number) {
@@ -25,7 +33,7 @@ export const personasService = {
         relations: { profesional_referencia: true }
     });
     if (!persona) throw new Error('Persona no encontrada');
-    return persona;
+    return sinPasswordReferencia(persona);
     },
 
   async crear(data: CrearPersonaDto) {

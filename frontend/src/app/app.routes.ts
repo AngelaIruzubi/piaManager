@@ -54,6 +54,20 @@ export const routes: Routes = [
       import('./features/pai/vista-pai/vista-pai')
       .then(m => m.VistaPai)
   },
+  {
+    path: 'areas/:id/objetivos/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pai/form-objetivo/form-objetivo')
+      .then(m => m.FormObjetivo)
+  },
+  {
+    path: 'objetivos/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pai/form-objetivo/form-objetivo')
+      .then(m => m.FormObjetivo)
+  },
 
   // Solo coordinador
   {

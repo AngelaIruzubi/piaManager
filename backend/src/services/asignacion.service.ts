@@ -5,14 +5,21 @@ import { IsNull } from 'typeorm';
 
 const repo = AppDataSource.getRepository(Asignacion);
 
+function sinPasswordEducador(asignacion: Asignacion) {
+  if (!asignacion.educador) return asignacion;
+  const { password, ...educador } = asignacion.educador as any;
+  return { ...asignacion, educador };
+}
+
 export const asignacionService = {
 
   async getByPersona(personaId: number) {
-    return await repo.find({
+    const asignaciones = await repo.find({
       where: { persona: { id: personaId } },
       relations: { educador: true, persona: true },
       order: { fecha_inicio: 'DESC' }
     });
+    return asignaciones.map(sinPasswordEducador);
   },
 
   async asignar(personaId: number, data: AsignarEducadorDto) {
