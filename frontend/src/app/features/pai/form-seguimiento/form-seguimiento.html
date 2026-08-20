@@ -1,0 +1,53 @@
+<div class="form-container">
+
+  <button class="btn-volver" (click)="volver()">← Volver</button>
+
+  <h2>Nueva observación</h2>
+
+  <div class="objetivo-contexto" *ngIf="objetivo">
+    <span class="etiqueta">Objetivo</span>
+    <p>{{ objetivo.descripcion }}</p>
+    <span class="estado-badge" [style.background]="getColorEstado(objetivo.estado)">
+      {{ objetivo.estado | titlecase }}
+    </span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Fecha *</label>
+        <input type="date" formControlName="fecha" />
+      </div>
+      <div class="campo">
+        <label>Porcentaje de logro * (0-100)</label>
+        <input type="number" formControlName="porcentaje_logro"
+               min="0" max="100" />
+        <div class="porcentaje-visual">
+          <div class="barra">
+            <div class="fill"
+                 [style.width.%]="form.get('porcentaje_logro')?.value || 0">
+            </div>
+          </div>
+          <span>{{ form.get('porcentaje_logro')?.value || 0 }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Observación *</label>
+      <textarea formControlName="observacion" rows="4"
+        placeholder="Describe la evolución del objetivo..."></textarea>
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
+        {{ cargando ? 'Guardando...' : 'Guardar observación' }}
+      </button>
+    </div>
+
+  </form>
+</div>

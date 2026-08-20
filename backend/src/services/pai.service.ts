@@ -10,10 +10,26 @@ const AREAS_FIJAS = [
   'autonomia', 'cognitiva', 'social', 'ocupacional', 'salud'
 ];
 
-function sinPasswordCreador(pai: Pai) {
-  if (!pai.creado_por) return pai;
-  const { password, ...creado_por } = pai.creado_por as any;
-  return { ...pai, creado_por };
+function sinPassword(usuario: any) {
+  if (!usuario) return usuario;
+  const { password, ...resto } = usuario;
+  return resto;
+}
+
+function sanearPai(pai: Pai) {
+  const areas = (pai.areas ?? []).map(area => ({
+    ...area,
+    objetivos: (area.objetivos ?? []).map(objetivo => ({
+      ...objetivo,
+      seguimientos: [...(objetivo.seguimientos ?? [])]
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .map(seguimiento => ({
+          ...seguimiento,
+          registrado_por: sinPassword(seguimiento.registrado_por)
+        }))
+    }))
+  }));
+  return { ...pai, creado_por: sinPassword(pai.creado_por), areas };
 }
 
 export const paiService = {
@@ -21,19 +37,27 @@ export const paiService = {
   async getByPersona(personaId: number) {
     const pais = await paiRepo.find({
       where: { persona: { id: personaId } },
-      relations: { persona: true, areas: { objetivos: true }, creado_por: true },
+      relations: {
+        persona: true,
+        areas: { objetivos: { seguimientos: { registrado_por: true } } },
+        creado_por: true
+      },
       order: { anio: 'DESC' }
     });
-    return pais.map(sinPasswordCreador);
+    return pais.map(sanearPai);
   },
 
   async getById(id: number) {
     const pai = await paiRepo.findOne({
       where: { id },
-      relations: { persona: true, areas: { objetivos: true }, creado_por: true }
+      relations: {
+        persona: true,
+        areas: { objetivos: { seguimientos: { registrado_por: true } } },
+        creado_por: true
+      }
     });
     if (!pai) throw new Error('PAI no encontrado');
-    return sinPasswordCreador(pai);
+    return sanearPai(pai);
   },
 
   async crear(personaId: number, data: CrearPaiDto, creadoPorId: number) {

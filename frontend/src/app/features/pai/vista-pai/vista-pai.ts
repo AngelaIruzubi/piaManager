@@ -104,4 +104,7 @@ export class VistaPai implements OnInit {
       }
     });
   }
+  addSeguimiento(objetivoId: number) {
+  this.router.navigate(['/objetivos', objetivoId, 'seguimientos', 'nuevo']);
+}
 }

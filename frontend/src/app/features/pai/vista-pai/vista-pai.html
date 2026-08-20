@@ -1,9 +1,9 @@
 <div class="pai-container">
 
   <div class="cabecera-acciones">
-  <button class="btn-volver" (click)="volver()">← Volver</button>
-  <button class="btn-nuevo" (click)="crearPai()" *ngIf="!pai">+ Crear PAI</button>
-</div>
+    <button class="btn-volver" (click)="volver()">← Volver</button>
+    <button class="btn-nuevo" (click)="crearPai()" *ngIf="!pai">+ Crear PAI</button>
+  </div>
 
   <div *ngIf="cargando" class="cargando">Cargando PAI...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
@@ -50,6 +50,19 @@
             <button class="btn-mini btn-estado" (click)="cambiarEstado(objetivo)">
               Cambiar estado
             </button>
+            <button class="btn-mini btn-seguimiento" (click)="addSeguimiento(objetivo.id)">
+              + Observación
+            </button>
+          </div>
+
+          <div class="observaciones-lista" *ngIf="objetivo.seguimientos?.length">
+            <div class="observacion-item" *ngFor="let obs of objetivo.seguimientos">
+              <div class="observacion-cabecera">
+                <span class="observacion-fecha">{{ obs.fecha | date:'dd/MM/yyyy' }}</span>
+                <span class="observacion-porcentaje">{{ obs.porcentaje_logro }}%</span>
+              </div>
+              <p class="observacion-texto">{{ obs.observacion }}</p>
+            </div>
           </div>
         </div>
 

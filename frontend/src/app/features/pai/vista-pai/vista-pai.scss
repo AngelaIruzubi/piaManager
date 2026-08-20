@@ -191,3 +191,41 @@
     color: #1F5C99;
   }
 }
+.btn-seguimiento {
+  border-color: #1A6B3A;
+  color: #1A6B3A;
+  &:hover { background: #E8F5E9; }
+}
+
+.observaciones-lista {
+  margin-top: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.observacion-item {
+  font-size: 0.8rem;
+}
+
+.observacion-cabecera {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.observacion-fecha {
+  color: #888;
+}
+
+.observacion-porcentaje {
+  color: #1A6B3A;
+  font-weight: 600;
+}
+
+.observacion-texto {
+  margin: 0.15rem 0 0;
+  color: #555;
+}

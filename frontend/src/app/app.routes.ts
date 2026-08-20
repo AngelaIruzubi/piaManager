@@ -84,6 +84,13 @@ export const routes: Routes = [
       import('./features/usuarios/form-usuario/form-usuario')
       .then(m => m.FormUsuario)
   },
+  {
+  path: 'objetivos/:id/seguimientos/nuevo',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/pai/form-seguimiento/form-seguimiento')
+    .then(m => m.FormSeguimiento)
+},
 
   // Redirecciones
   { path: '', redirectTo: 'personas', pathMatch: 'full' },
