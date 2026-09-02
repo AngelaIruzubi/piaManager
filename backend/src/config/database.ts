@@ -10,6 +10,7 @@ import { Objetivo } from '../entities/Objetivo';
 import { Medio } from '../entities/Medio';
 import { Seguimiento } from '../entities/Seguimiento';
 import { Catalogo } from '../entities/Catalogo';
+import { ObjetivoPictograma } from '../entities/ObjetivoPictograma';
 
 dotenv.config();
 
@@ -22,5 +23,5 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
-  entities: [Usuario,Catalogo, Persona, Asignacion, Pai, Area, Objetivo, Medio, Seguimiento],
+  entities: [Usuario,Catalogo, Persona, Asignacion, Pai, Area, Objetivo, Medio, Seguimiento, ObjetivoPictograma],
 });

@@ -1,71 +1,94 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
 .navbar {
   display: flex;
   align-items: center;
-  background: #1F5C99;
+  background: var(--purple-700);
   color: white;
   padding: 0 2rem;
-  height: 60px;
-  gap: 1rem;
+  height: 68px;
+  gap: 1.5rem;
 
   .navbar-brand {
-    font-weight: bold;
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 1.3rem;
     flex: 1;
   }
 
+  .navbar-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   .navbar-info {
-    font-size: 0.9rem;
-    opacity: 0.9;
+    font-size: 1rem;
+    opacity: 0.95;
   }
 
   .btn-logout {
     background: transparent;
-    border: 1px solid white;
+    border: 2px solid white;
     color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
 
     &:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.15);
     }
   }
 }
 
 .layout {
   display: flex;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 68px);
 }
 
 .sidebar {
-  width: 200px;
-  background: #f5f5f5;
-  border-right: 1px solid #e0e0e0;
-  padding: 1rem 0;
+  width: 240px;
+  background: var(--white);
+  border-right: 2px solid var(--purple-100);
+  padding: 1.5rem 0;
 
   a {
-    display: block;
-    padding: 0.75rem 1.5rem;
-    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 1rem 1.5rem;
+    color: var(--ink);
     text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 700;
     transition: background 0.2s;
 
+    svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
     &:hover {
-      background: #e8e8e8;
+      background: var(--purple-50);
     }
 
     &.activo {
-      background: #EEF4FB;
-      color: #1F5C99;
-      font-weight: 500;
-      border-left: 3px solid #1F5C99;
+      background: var(--purple-100);
+      color: var(--purple-900);
+      border-left: 4px solid var(--purple-700);
+      padding-left: calc(1.5rem - 4px);
     }
   }
 }
@@ -73,5 +96,21 @@
 .contenido {
   flex: 1;
   overflow-y: auto;
-  background: #fafafa;
+  background: var(--purple-50);
+}
+
+@media print {
+  .navbar, .sidebar {
+    display: none !important;
+  }
+
+  .layout {
+    height: auto;
+    display: block;
+  }
+
+  .contenido {
+    overflow: visible;
+    background: white;
+  }
 }

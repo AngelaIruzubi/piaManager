@@ -1,49 +1,37 @@
 <div class="lista-container">
   <div class="cabecera">
-    <h2>Usuarios</h2>
-    <button class="btn-nuevo" *ngIf="esCoordinador" routerLink="/personas/nueva">+ Nuevo usuario</button>
+    <div>
+      <h1>Usuarios</h1>
+      <p class="subtitulo">Elige una persona para ver su plan de atención</p>
+    </div>
+    <button class="btn-nuevo" *ngIf="esCoordinador" routerLink="/personas/nueva">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Nuevo usuario
+    </button>
   </div>
 
-  <div *ngIf="cargando" class="cargando">
-    Cargando...
-  </div>
-
-  <div *ngIf="error" class="error">
-    {{ error }}
-  </div>
+  <div *ngIf="cargando" class="cargando">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
 
   <div *ngIf="!cargando && !error">
-    <div *ngIf="personas.length === 0" class="vacio">
-      No hay personas registradas.
-    </div>
+    <div *ngIf="personas.length === 0" class="vacio">No hay personas registradas.</div>
 
-    <div class="tabla-container" *ngIf="personas.length > 0">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Tutor legal</th>
-            <th>Teléfono</th>
-            <th>Educador de referencia</th>
-            <th>Estado</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let persona of personas" (click)="verFicha(persona.id)">
-            <td>{{ nombreCompleto(persona) }}</td>
-            <td>{{ persona.tutor_legal }}</td>
-            <td>{{ persona.telefono_contacto }}</td>
-            <td>{{ persona.profesional_referencia?.nombre }} {{ persona.profesional_referencia?.apellidos }}</td>
-            <td>
-              <span class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
-                {{ persona.activo ? 'Activo' : 'Baja' }}
-              </span>
-            </td>
-            <td>→</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="grid-tarjetas" *ngIf="personas.length > 0">
+      <div class="tarjeta-persona" *ngFor="let persona of personas" (click)="verFicha(persona.id)">
+        <div class="avatar">{{ iniciales(persona) }}</div>
+        <div class="datos">
+          <span class="nombre">{{ nombreCompleto(persona) }}</span>
+          <div class="educador">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4.5-6 7-6s6 2 7 6"/></svg>
+            Educador: {{ persona.profesional_referencia?.nombre }} {{ persona.profesional_referencia?.apellidos }}
+          </div>
+          <div class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
+            <svg *ngIf="persona.activo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+            <svg *ngIf="!persona.activo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg>
+            {{ persona.activo ? 'Activo' : 'Baja' }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

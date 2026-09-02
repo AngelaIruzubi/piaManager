@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tema accesible de PIA Manager — lila, alto contraste, pensado para
+   personas con discapacidad intelectual. Basado en la maqueta aprobada. */
+
+:root {
+  --purple-900: oklch(28% 0.12 300);
+  --purple-700: oklch(42% 0.17 300);
+  --purple-600: oklch(50% 0.18 300);
+  --purple-200: oklch(90% 0.04 300);
+  --purple-100: oklch(94% 0.025 300);
+  --purple-50: oklch(98% 0.01 300);
+
+  --ink: oklch(27% 0.015 280);
+  --ink-soft: oklch(45% 0.02 280);
+  --white: oklch(99% 0 0);
+
+  --green: oklch(50% 0.14 145);
+  --green-bg: oklch(94% 0.05 145);
+  --amber: oklch(50% 0.14 55);
+  --amber-bg: oklch(94% 0.06 75);
+  --gray: oklch(48% 0.01 280);
+  --gray-bg: oklch(93% 0.005 280);
+  --red: oklch(50% 0.17 25);
+  --red-bg: oklch(94% 0.06 25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  background: var(--purple-50);
+  color: var(--ink);
+  font-size: 17px;
+}
+
+a {
+  color: var(--purple-700);
+}
+a:hover {
+  color: var(--purple-900);
+}
+
+button {
+  font-family: inherit;
+}

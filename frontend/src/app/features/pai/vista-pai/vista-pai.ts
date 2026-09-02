@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaiService } from '../../../core/services/pai.service';
 import { Pai } from '../../../shared/models/pai.model';
-import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -21,7 +20,6 @@ export class VistaPai implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   pai: Pai | null = null;
-  private http = inject(HttpClient);
   personaId: number = 0;
   cargando = true;
   error = '';
@@ -49,23 +47,8 @@ export class VistaPai implements OnInit {
     this.router.navigate(['/personas', this.personaId]);
   }
 
-  getColorEstado(estado: string): string {
-    const colores: any = {
-      pendiente: '#E2E8F0',
-      en_proceso: '#BEE3F8',
-      conseguido: '#C6F6D5',
-      no_trabajado: '#FED7D7'
-    };
-    return colores[estado] || '#E2E8F0';
-  }
-
-  getColorEstadoPai(estado: string): string {
-    const colores: any = {
-      borrador: '#FEF3C7',
-      activo: '#C6F6D5',
-      cerrado: '#E2E8F0'
-    };
-    return colores[estado] || '#E2E8F0';
+  iniciales(nombre: string): string {
+    return nombre?.charAt(0).toUpperCase() ?? '';
   }
 
   calcularProgreso(area: any): number {
@@ -73,38 +56,42 @@ export class VistaPai implements OnInit {
     const conseguidos = area.objetivos.filter((o: any) => o.estado === 'conseguido').length;
     return Math.round((conseguidos / area.objetivos.length) * 100);
   }
+
   crearPai() {
-  this.router.navigate(['/personas', this.personaId, 'pai', 'nuevo']);
-}
+    this.router.navigate(['/personas', this.personaId, 'pai', 'nuevo']);
+  }
+
+  descargarPdf() {
+    if (!this.pai) return;
+
+    const nombre = `${this.pai.persona?.nombre ?? ''} ${this.pai.persona?.apellidos ?? ''}`.trim();
+    const tituloOriginal = document.title;
+    document.title = `PAI ${this.pai.anio} - ${nombre}`;
+
+    const restaurar = () => {
+      document.title = tituloOriginal;
+      window.removeEventListener('afterprint', restaurar);
+    };
+    window.addEventListener('afterprint', restaurar);
+
+    window.print();
+  }
+
+  verDetalle(objetivoId: number) {
+    this.router.navigate(['/objetivos', objetivoId]);
+  }
 
   addObjetivo(areaId: number) {
     this.router.navigate(['/areas', areaId, 'objetivos', 'nuevo']);
   }
 
-  editarObjetivo(objetivoId: number) {
-    this.router.navigate(['/objetivos', objetivoId, 'editar']);
+  verPictogramas(objetivoId: number, event: Event) {
+    event.stopPropagation();
+    this.router.navigate(['/objetivos', objetivoId, 'pictogramas']);
   }
 
-  cambiarEstado(objetivo: any) {
-    const estados = ['pendiente', 'en_proceso', 'conseguido', 'no_trabajado'];
-    const actual = estados.indexOf(objetivo.estado);
-    const siguiente = estados[(actual + 1) % estados.length];
-
-    if (!confirm(`¿Cambiar estado a "${siguiente}"?`)) return;
-
-    this.http.patch(`http://localhost:3000/api/objetivos/${objetivo.id}/estado`,
-      { estado: siguiente }
-    ).subscribe({
-      next: () => {
-        objetivo.estado = siguiente;
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => {
-        alert(err.error?.mensaje || 'Error al cambiar estado');
-      }
-    });
+  addSeguimiento(objetivoId: number, event: Event) {
+    event.stopPropagation();
+    this.router.navigate(['/objetivos', objetivoId, 'seguimientos', 'nuevo']);
   }
-  addSeguimiento(objetivoId: number) {
-  this.router.navigate(['/objetivos', objetivoId, 'seguimientos', 'nuevo']);
-}
 }

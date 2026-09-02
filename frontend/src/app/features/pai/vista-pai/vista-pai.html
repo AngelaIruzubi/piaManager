@@ -1,73 +1,101 @@
 <div class="pai-container">
 
-  <div class="cabecera-acciones">
-    <button class="btn-volver" (click)="volver()">← Volver</button>
-    <button class="btn-nuevo" (click)="crearPai()" *ngIf="!pai">+ Crear PAI</button>
+  <div class="cabecera-acciones no-imprimir">
+    <button class="btn-volver" (click)="volver()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver
+    </button>
+    <button class="btn-pdf" *ngIf="pai" (click)="descargarPdf()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+      Descargar PDF
+    </button>
   </div>
 
   <div *ngIf="cargando" class="cargando">Cargando PAI...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 
-  <div *ngIf="!pai && !cargando && !error" class="vacio">
-    No hay ningún PAI registrado para esta persona.
+  <div *ngIf="!pai && !cargando && !error" class="vacio-pai">
+    <p>No hay ningún PAI registrado para esta persona.</p>
+    <button class="btn-nuevo" (click)="crearPai()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Crear PAI
+    </button>
   </div>
 
   <div *ngIf="pai && !cargando">
 
-    <div class="cabecera">
-      <h2>PAI {{ pai.anio }}</h2>
-      <span class="badge-estado" [style.background]="getColorEstadoPai(pai.estado)">
-        {{ pai.estado }}
-      </span>
+    <!-- Contexto de la persona / PAI -->
+    <div class="contexto">
+      <div class="avatar">{{ iniciales(pai.persona?.nombre || '') }}</div>
+      <div class="datos-contexto">
+        <span class="nombre">{{ pai.persona?.nombre }} {{ pai.persona?.apellidos }}</span>
+        <span class="subtitulo">Plan de Atención Individual · {{ pai.anio }}</span>
+      </div>
+      <div class="estado-pill" [ngClass]="pai.estado === 'activo' ? 'estado-conseguido' : 'estado-pendiente'">
+        <svg *ngIf="pai.estado === 'activo'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+        {{ pai.estado | titlecase }}
+      </div>
     </div>
 
-    <div *ngIf="pai.observaciones_generales" class="observaciones">
+    <div *ngIf="pai.observaciones_generales" class="observaciones-generales">
       {{ pai.observaciones_generales }}
     </div>
 
+    <!-- Áreas -->
     <div class="areas" *ngIf="pai.areas">
       <div class="area-card" *ngFor="let area of pai.areas">
 
         <div class="area-header">
-          <h3>{{ area.tipo | titlecase }}</h3>
-          <div class="progreso">
-            <div class="progreso-barra">
-              <div class="progreso-fill" [style.width.%]="calcularProgreso(area)"></div>
+          <div class="area-icono" [ngSwitch]="area.tipo">
+            <svg *ngSwitchCase="'autonomia'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>
+            <svg *ngSwitchCase="'cognitiva'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c2-1 5-1 8 0v14c-3-1-6-1-8 0V5z"/><path d="M20 5c-2-1-5-1-8 0v14c3-1 6-1 8 0V5z"/></svg>
+            <svg *ngSwitchCase="'social'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M2 20c0.7-3.2 3.4-5 7-5s6.3 1.8 7 5"/><path d="M16 4.5c1.7 0.4 3 1.9 3 3.5s-1.3 3.1-3 3.5"/><path d="M18 14.5c1.9 0.6 3.3 2 4 5.5"/></svg>
+            <svg *ngSwitchCase="'ocupacional'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 012-2h2a2 2 0 012 2v2"/></svg>
+            <svg *ngSwitchCase="'salud'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C1 7 2.5 4 5.5 4c2 0 3.5 1.3 4.5 3 1-1.7 2.5-3 4.5-3 3 0 4.5 3 3 7-2.5 4.6-9.5 9-9.5 9z"/></svg>
+          </div>
+          <span class="area-titulo">{{ area.tipo | titlecase }}</span>
+          <div class="area-progreso">
+            <div class="barra">
+              <div class="relleno" [style.width.%]="calcularProgreso(area)"></div>
             </div>
-            <span>{{ calcularProgreso(area) }}%</span>
+            <span class="porcentaje">{{ calcularProgreso(area) }}%</span>
           </div>
         </div>
 
-        <div class="objetivo-item" *ngFor="let objetivo of area.objetivos"
-            [style.border-left-color]="getColorEstado(objetivo.estado)">
-          <div class="objetivo-desc">{{ objetivo.descripcion }}</div>
-          <div class="objetivo-meta">
-            <span class="plazo">{{ objetivo.plazo }}</span>
-            <span class="estado-badge" [style.background]="getColorEstado(objetivo.estado)">
-              {{ objetivo.estado | titlecase }}
-            </span>
-            <button class="btn-mini" (click)="editarObjetivo(objetivo.id)">Editar</button>
-            <button class="btn-mini btn-estado" (click)="cambiarEstado(objetivo)">
-              Cambiar estado
-            </button>
-            <button class="btn-mini btn-seguimiento" (click)="addSeguimiento(objetivo.id)">
-              + Observación
-            </button>
+        <div class="objetivo-card" *ngFor="let objetivo of area.objetivos" (click)="verDetalle(objetivo.id)">
+
+          <div class="objetivo-icono">
+            <img *ngIf="objetivo.pictogramas?.length" [src]="objetivo.pictogramas[0].imagen_url" [alt]="objetivo.pictogramas[0].keyword" />
+            <svg *ngIf="!objetivo.pictogramas?.length" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
           </div>
 
-          <div class="observaciones-lista" *ngIf="objetivo.seguimientos?.length">
-            <div class="observacion-item" *ngFor="let obs of objetivo.seguimientos">
-              <div class="observacion-cabecera">
-                <span class="observacion-fecha">{{ obs.fecha | date:'dd/MM/yyyy' }}</span>
-                <span class="observacion-porcentaje">{{ obs.porcentaje_logro }}%</span>
-              </div>
-              <p class="observacion-texto">{{ obs.observacion }}</p>
+          <div class="objetivo-info">
+            <span class="objetivo-desc">{{ objetivo.descripcion }}</span>
+
+            <div class="estado-pill" [ngClass]="'estado-' + objetivo.estado">
+              <svg *ngIf="objetivo.estado === 'conseguido'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+              <svg *ngIf="objetivo.estado === 'en_proceso'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+              <svg *ngIf="objetivo.estado === 'pendiente'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3.5 3"><circle cx="12" cy="12" r="9"/></svg>
+              <svg *ngIf="objetivo.estado === 'no_trabajado'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg>
+              {{ objetivo.estado === 'en_proceso' ? 'En proceso' : (objetivo.estado === 'no_trabajado' ? 'No trabajado' : (objetivo.estado | titlecase)) }}
+            </div>
+
+            <div class="acciones no-imprimir">
+              <button class="btn-accion" (click)="addSeguimiento(objetivo.id, $event)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
+                Añadir observación
+              </button>
+              <button class="btn-accion" (click)="verPictogramas(objetivo.id, $event)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
+                Ver pictogramas
+              </button>
             </div>
           </div>
         </div>
 
-        <button class="btn-add-objetivo" (click)="addObjetivo(area.id)">
-          + Añadir objetivo
+        <button class="btn-add-objetivo no-imprimir" (click)="addObjetivo(area.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+          Añadir objetivo
         </button>
 
         <div *ngIf="!area.objetivos || area.objetivos.length === 0" class="sin-objetivos">

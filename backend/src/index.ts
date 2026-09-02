@@ -13,7 +13,7 @@ import medioRoutes from './routes/medio.routes';
 import seguimientoRoutes from './routes/seguimiento.routes';
 import asignacionRoutes from './routes/asignacion.routes';
 import usuarioRoutes from './routes/usuario.routes';
-
+import pictogramaRoutes from './routes/pictograma.routes';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -47,6 +47,8 @@ app.use('/api/seguimientos', seguimientoRoutes);
 app.use('/api/personas/:personaId/asignaciones', asignacionRoutes);
 app.use('/api/asignaciones', asignacionRoutes);
 app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/pictogramas', pictogramaRoutes);
+app.use('/api/objetivos', pictogramaRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'PIA Manager API funcionando 🚀' });

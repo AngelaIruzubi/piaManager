@@ -6,6 +6,7 @@ import {
 import { Area } from './Area';
 import { Medio } from './Medio';
 import { Seguimiento } from './Seguimiento';
+import { ObjetivoPictograma } from './ObjetivoPictograma';
 
 @Entity('objetivos')
 export class Objetivo {
@@ -39,6 +40,9 @@ export class Objetivo {
 
   @OneToMany(() => Seguimiento, seguimiento => seguimiento.objetivo, { cascade: true })
   seguimientos: Seguimiento[];
+
+  @OneToMany(() => ObjetivoPictograma, pictograma => pictograma.objetivo, { cascade: true })
+  pictogramas: ObjetivoPictograma[];
 
   @CreateDateColumn()
   created_at: Date;

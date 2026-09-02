@@ -5,6 +5,8 @@ export interface Usuario {
   email: string;
   rol: string;
   activo: boolean;
+  fecha_alta?: string;
+  fecha_baja?: string;
 }
 
 export interface LoginResponse {

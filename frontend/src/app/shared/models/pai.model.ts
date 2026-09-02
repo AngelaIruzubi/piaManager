@@ -6,6 +6,7 @@ export interface Pai {
   fecha_revision?: string;
   observaciones_generales?: string;
   areas?: Area[];
+  persona?: { id: number; nombre: string; apellidos: string };
 }
 
 export interface Area {
@@ -25,6 +26,7 @@ export interface Objetivo {
   fecha_consecucion?: string;
   medios?: Medio[];
   seguimientos?: Seguimiento[];
+  pictogramas?: Pictograma[];
 }
 
 export interface Medio {
@@ -39,4 +41,11 @@ export interface Seguimiento {
   fecha: string;
   porcentaje_logro: number;
   observacion: string;
+}
+
+export interface Pictograma {
+  id: number;
+  arasaac_id: number;
+  keyword: string;
+  imagen_url: string;
 }

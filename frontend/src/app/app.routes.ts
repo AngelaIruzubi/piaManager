@@ -85,11 +85,39 @@ export const routes: Routes = [
       .then(m => m.FormUsuario)
   },
   {
+    path: 'usuarios/:id/editar',
+    canActivate: [authGuard, coordinadorGuard],
+    loadComponent: () =>
+      import('./features/usuarios/form-usuario/form-usuario')
+      .then(m => m.FormUsuario)
+  },
+  {
+    path: 'usuarios/:id',
+    canActivate: [authGuard, coordinadorGuard],
+    loadComponent: () =>
+      import('./features/usuarios/ficha-usuario/ficha-usuario')
+      .then(m => m.FichaUsuario)
+  },
+  {
   path: 'objetivos/:id/seguimientos/nuevo',
   canActivate: [authGuard],
   loadComponent: () =>
     import('./features/pai/form-seguimiento/form-seguimiento')
     .then(m => m.FormSeguimiento)
+},
+{
+  path: 'objetivos/:id/pictogramas',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/pai/buscador-pictogramas/buscador-pictogramas')
+    .then(m => m.BuscadorPictogramas)
+},
+{
+  path: 'objetivos/:id',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/pai/objetivo-detalle/objetivo-detalle')
+    .then(m => m.ObjetivoDetalle)
 },
 
   // Redirecciones
