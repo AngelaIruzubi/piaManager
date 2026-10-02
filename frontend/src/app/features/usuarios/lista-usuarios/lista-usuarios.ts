@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -16,6 +16,7 @@ export class ListaUsuarios implements OnInit {
 
   private usuarioService = inject(UsuarioService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   usuarios: Usuario[] = [];
   cargando = true;
@@ -36,7 +37,8 @@ export class ListaUsuarios implements OnInit {
     });
   }
 
-  darDeBaja(id: number) {
+  darDeBaja(id: number, event: Event) {
+    event.stopPropagation();
     if (!confirm('¿Estás segura de que quieres dar de baja a este usuario?')) return;
 
     this.usuarioService.darDeBaja(id).subscribe({
@@ -50,5 +52,9 @@ export class ListaUsuarios implements OnInit {
         alert(err?.error?.mensaje || 'Error al dar de baja al usuario');
       }
     });
+  }
+
+  verFicha(id: number) {
+    this.router.navigate(['/usuarios', id]);
   }
 }

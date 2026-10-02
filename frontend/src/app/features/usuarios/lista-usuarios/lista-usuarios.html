@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuario of usuarios">
+        <tr *ngFor="let usuario of usuarios" (click)="verFicha(usuario.id)">
           <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
           <td>{{ usuario.email }}</td>
           <td>
@@ -36,7 +36,7 @@
             <button
               class="btn-baja"
               *ngIf="usuario.activo"
-              (click)="darDeBaja(usuario.id)">
+              (click)="darDeBaja(usuario.id, $event)">
               Dar de baja
             </button>
           </td>

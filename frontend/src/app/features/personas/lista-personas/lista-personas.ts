@@ -50,4 +50,9 @@ export class ListaPersonas implements OnInit {
   nombreCompleto(persona: Persona): string {
     return `${persona.nombre} ${persona.apellidos}`;
   }
+
+  iniciales(persona: Persona): string {
+    const apellido = persona.apellidos?.charAt(0) ?? '';
+    return `${persona.nombre.charAt(0)}${apellido}`.toUpperCase();
+  }
 }

@@ -26,7 +26,11 @@ function sanearPai(pai: Pai) {
         .map(seguimiento => ({
           ...seguimiento,
           registrado_por: sinPassword(seguimiento.registrado_por)
-        }))
+        })),
+      pictogramas: (objetivo.pictogramas ?? []).map(p => ({
+        ...p,
+        imagen_url: `https://static.arasaac.org/pictograms/${p.arasaac_id}/${p.arasaac_id}_500.png`
+      }))
     }))
   }));
   return { ...pai, creado_por: sinPassword(pai.creado_por), areas };
@@ -39,7 +43,7 @@ export const paiService = {
       where: { persona: { id: personaId } },
       relations: {
         persona: true,
-        areas: { objetivos: { seguimientos: { registrado_por: true } } },
+        areas: { objetivos: { seguimientos: { registrado_por: true }, pictogramas: true } },
         creado_por: true
       },
       order: { anio: 'DESC' }
@@ -52,7 +56,7 @@ export const paiService = {
       where: { id },
       relations: {
         persona: true,
-        areas: { objetivos: { seguimientos: { registrado_por: true } } },
+        areas: { objetivos: { seguimientos: { registrado_por: true }, pictogramas: true } },
         creado_por: true
       }
     });

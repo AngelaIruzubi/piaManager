@@ -45,6 +45,12 @@ export class FichaPersona implements OnInit {
     });
   }
 
+  iniciales(): string {
+    if (!this.persona) return '';
+    const apellido = this.persona.apellidos?.charAt(0) ?? '';
+    return `${this.persona.nombre.charAt(0)}${apellido}`.toUpperCase();
+  }
+
   verPai() {
     this.router.navigate(['/personas', this.persona?.id, 'pai']);
   }

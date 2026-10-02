@@ -2,7 +2,7 @@
 
   <button class="btn-volver" (click)="volver()">← Volver</button>
 
-  <h2>Nuevo usuario</h2>
+  <h2>{{ esEdicion ? 'Editar educador' : 'Nuevo usuario' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -22,7 +22,7 @@
       <input type="email" formControlName="email" />
     </div>
 
-    <div class="campo">
+    <div class="campo" *ngIf="!esEdicion">
       <label>Contraseña *</label>
       <input type="password" formControlName="password" />
       <small>Mínimo 6 caracteres</small>
@@ -33,7 +33,7 @@
     <div class="acciones">
       <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
       <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
-        {{ cargando ? 'Creando...' : 'Crear usuario' }}
+        {{ cargando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear usuario') }}
       </button>
     </div>
 

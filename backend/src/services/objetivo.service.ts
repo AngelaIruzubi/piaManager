@@ -17,10 +17,19 @@ export const objetivoService = {
   async getById(id: number) {
     const objetivo = await repo.findOne({
       where: { id },
-      relations: { medios: true, seguimientos: true, area: true }
+      relations: { medios: true, seguimientos: true, area: true, pictogramas: true }
     });
     if (!objetivo) throw new Error('Objetivo no encontrado');
-    return objetivo;
+
+    return {
+      ...objetivo,
+      seguimientos: [...(objetivo.seguimientos ?? [])]
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()),
+      pictogramas: (objetivo.pictogramas ?? []).map(p => ({
+        ...p,
+        imagen_url: `https://static.arasaac.org/pictograms/${p.arasaac_id}/${p.arasaac_id}_500.png`
+      }))
+    };
   },
 
   async crear(areaId: number, data: CrearObjetivoDto) {

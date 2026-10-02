@@ -21,7 +21,7 @@
   &:hover { color: var(--purple-900); }
 }
 
-.cabecera-persona {
+.cabecera-usuario {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -96,7 +96,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .dato {
@@ -133,25 +132,18 @@
   &.baja { background: var(--red-bg); color: var(--red); }
 }
 
-.btn-pai {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: var(--purple-700);
-  color: white;
-  border: none;
-  border-radius: 16px;
-  padding: 18px;
-  width: 100%;
-  font-family: inherit;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
+.badge-rol {
+  display: inline-block;
+  background: #EDF2F7;
+  color: #4A5568;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
 
-  svg { width: 24px; height: 24px; }
-
-  &:hover { background: var(--purple-600); }
+  &.coordinador {
+    background: var(--purple-100);
+    color: var(--purple-700);
+  }
 }
 
 .cargando, .error {
