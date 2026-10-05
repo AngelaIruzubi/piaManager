@@ -15,6 +15,9 @@ export const authService = {
     const passwordOk = await bcrypt.compare(data.password, usuario.password);
     if (!passwordOk) throw new Error('Credenciales incorrectas');
 
+    // Un usuario dado de baja no puede entrar. Mismo mensaje para no revelar el estado de la cuenta
+    if (!usuario.activo) throw new Error('Credenciales incorrectas');
+
     const token = (jwt.sign as Function)(
       { id: usuario.id, email: usuario.email, rol: usuario.rol },
       process.env.JWT_SECRET!,

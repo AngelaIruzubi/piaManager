@@ -49,6 +49,21 @@ describe('authService', () => {
       ).rejects.toThrow('Credenciales incorrectas');
     });
 
+    it('debe lanzar error si el usuario está dado de baja', async () => {
+      const hash = await bcrypt.hash('123456', 10);
+      mockRepo.findOneBy.mockResolvedValue({
+        id: 2,
+        email: 'maria@pia.com',
+        password: hash,
+        rol: 'educador',
+        activo: false
+      });
+
+      await expect(
+        authService.login({ email: 'maria@pia.com', password: '123456' })
+      ).rejects.toThrow('Credenciales incorrectas');
+    });
+
     it('debe devolver token con credenciales correctas', async () => {
       const hash = await bcrypt.hash('123456', 10);
       mockRepo.findOneBy.mockResolvedValue({
