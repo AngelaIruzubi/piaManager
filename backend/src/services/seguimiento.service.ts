@@ -1,3 +1,4 @@
+import { BadRequestError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Seguimiento } from '../entities/Seguimiento';
 import { CrearSeguimientoDto, ActualizarSeguimientoDto } from '../dtos/seguimiento.dto';
@@ -16,7 +17,7 @@ export const seguimientoService = {
 
   async crear(objetivoId: number, data: CrearSeguimientoDto, usuarioId: number) {
     if (data.porcentaje_logro < 0 || data.porcentaje_logro > 100) {
-      throw new Error('El porcentaje debe estar entre 0 y 100');
+      throw new BadRequestError('El porcentaje debe estar entre 0 y 100');
     }
 
     const seguimiento = repo.create({
@@ -30,11 +31,11 @@ export const seguimientoService = {
   },
   async actualizar(id: number, data: ActualizarSeguimientoDto) {
   const seguimiento = await repo.findOneBy({ id });
-  if (!seguimiento) throw new Error('Seguimiento no encontrado');
+  if (!seguimiento) throw new NotFoundError('Seguimiento no encontrado');
 
   if (data.porcentaje_logro !== undefined) {
     if (data.porcentaje_logro < 0 || data.porcentaje_logro > 100) {
-      throw new Error('El porcentaje debe estar entre 0 y 100');
+      throw new BadRequestError('El porcentaje debe estar entre 0 y 100');
     }
   }
 

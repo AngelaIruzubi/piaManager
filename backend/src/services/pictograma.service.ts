@@ -1,3 +1,4 @@
+import { BadGatewayError, ConflictError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { ObjetivoPictograma } from '../entities/ObjetivoPictograma';
 import { Objetivo } from '../entities/Objetivo';
@@ -29,7 +30,7 @@ export const pictogramaService = {
   async buscar(keyword: string) {
     const url = `https://api.arasaac.org/v1/pictograms/es/search/${encodeURIComponent(keyword)}`;
     const response = await fetch(url);
-    if (!response.ok) throw new Error('Error al buscar pictogramas');
+    if (!response.ok) throw new BadGatewayError('Error al buscar pictogramas');
    const data = await response.json() as any[];
 
     return data.slice(0, 12).map((p: any) => ({
@@ -41,7 +42,7 @@ export const pictogramaService = {
 
   async sugerirPorObjetivo(objetivoId: number) {
     const objetivo = await objetivoRepo.findOneBy({ id: objetivoId });
-    if (!objetivo) throw new Error('Objetivo no encontrado');
+    if (!objetivo) throw new NotFoundError('Objetivo no encontrado');
 
     const palabras = palabrasClave(objetivo.descripcion);
     const vistos = new Set<number>();
@@ -81,7 +82,7 @@ export const pictogramaService = {
     const existe = await repo.findOne({
       where: { objetivo: { id: objetivoId }, arasaac_id }
     });
-    if (existe) throw new Error('Este pictograma ya está asignado al objetivo');
+    if (existe) throw new ConflictError('Este pictograma ya está asignado al objetivo');
 
     const pictograma = repo.create({
       objetivo: { id: objetivoId } as any,
@@ -93,7 +94,7 @@ export const pictogramaService = {
 
   async eliminar(id: number) {
     const pictograma = await repo.findOneBy({ id });
-    if (!pictograma) throw new Error('Pictograma no encontrado');
+    if (!pictograma) throw new NotFoundError('Pictograma no encontrado');
     await repo.remove(pictograma);
     return { mensaje: 'Pictograma eliminado correctamente' };
   }

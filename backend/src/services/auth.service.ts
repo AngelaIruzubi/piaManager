@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '../errors';
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { AppDataSource } from '../config/database';
@@ -10,13 +11,13 @@ export const authService = {
 
   async login(data: LoginDto) {
     const usuario = await usuarioRepo.findOneBy({ email: data.email });
-    if (!usuario) throw new Error('Credenciales incorrectas');
+    if (!usuario) throw new UnauthorizedError('Credenciales incorrectas');
 
     const passwordOk = await bcrypt.compare(data.password, usuario.password);
-    if (!passwordOk) throw new Error('Credenciales incorrectas');
+    if (!passwordOk) throw new UnauthorizedError('Credenciales incorrectas');
 
     // Un usuario dado de baja no puede entrar. Mismo mensaje para no revelar el estado de la cuenta
-    if (!usuario.activo) throw new Error('Credenciales incorrectas');
+    if (!usuario.activo) throw new UnauthorizedError('Credenciales incorrectas');
 
     const token = (jwt.sign as Function)(
       { id: usuario.id, email: usuario.email, rol: usuario.rol },
