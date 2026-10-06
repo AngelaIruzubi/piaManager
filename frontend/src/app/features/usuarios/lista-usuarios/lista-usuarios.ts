@@ -24,8 +24,9 @@ export class ListaUsuarios implements OnInit {
 
   ngOnInit() {
     this.usuarioService.getAll().subscribe({
-      next: (data: any) => {
-        this.usuarios = data;
+      next: (data: Usuario[]) => {
+        // El panel es de educadores: la coordinación no se gestiona desde aquí
+        this.usuarios = data.filter(u => u.rol === 'educador');
         this.cargando = false;
         this.cdr.detectChanges();
       },
