@@ -1,10 +1,8 @@
 import { AppDataSource } from '../config/database';
 import { Medio } from '../entities/Medio';
-import { CrearMedioDto, ActualizarMedioDto } from '../dtos/medio.dto';
+import { CrearMedioDto, ActualizarMedioDto, TIPOS_MEDIO } from '../dtos/medio.dto';
 
 const repo = AppDataSource.getRepository(Medio);
-
-const TIPOS_VALIDOS = ['material', 'persona_apoyo', 'tecnica', 'adaptacion_entorno'];
 
 export const medioService = {
 
@@ -16,8 +14,8 @@ export const medioService = {
   },
 
   async crear(objetivoId: number, data: CrearMedioDto) {
-    if (!TIPOS_VALIDOS.includes(data.tipo)) {
-      throw new Error(`Tipo no válido. Usa: ${TIPOS_VALIDOS.join(', ')}`);
+    if (!TIPOS_MEDIO.includes(data.tipo)) {
+      throw new Error(`Tipo no válido. Usa: ${TIPOS_MEDIO.join(', ')}`);
     }
 
     const medio = repo.create({
