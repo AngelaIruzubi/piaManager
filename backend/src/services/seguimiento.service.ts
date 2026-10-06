@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/database';
 import { Seguimiento } from '../entities/Seguimiento';
-import { CrearSeguimientoDto } from '../dtos/seguimiento.dto';
+import { CrearSeguimientoDto, ActualizarSeguimientoDto } from '../dtos/seguimiento.dto';
 
 const repo = AppDataSource.getRepository(Seguimiento);
 
@@ -28,7 +28,7 @@ export const seguimientoService = {
     });
     return await repo.save(seguimiento);
   },
-  async actualizar(id: number, data: Partial<CrearSeguimientoDto>) {
+  async actualizar(id: number, data: ActualizarSeguimientoDto) {
   const seguimiento = await repo.findOneBy({ id });
   if (!seguimiento) throw new Error('Seguimiento no encontrado');
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -20,7 +20,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,6 +44,7 @@ export class LoginComponent {
       error: (err) => {
         this.error = err.error?.mensaje || 'Error al iniciar sesión';
         this.cargando = false;
+        this.cdr.detectChanges(); // sin Zone.js hay que avisar a Angular para que pinte el error
       }
     });
   }

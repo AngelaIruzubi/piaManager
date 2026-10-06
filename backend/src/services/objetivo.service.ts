@@ -1,6 +1,9 @@
 import { AppDataSource } from '../config/database';
 import { Objetivo } from '../entities/Objetivo';
-import { CrearObjetivoDto, ActualizarObjetivoDto, CambiarEstadoObjetivoDto } from '../dtos/objetivo.dto';
+import {
+  CrearObjetivoDto, ActualizarObjetivoDto, CambiarEstadoObjetivoDto,
+  PLAZOS, ESTADOS_OBJETIVO
+} from '../dtos/objetivo.dto';
 
 const repo = AppDataSource.getRepository(Objetivo);
 
@@ -33,8 +36,7 @@ export const objetivoService = {
   },
 
   async crear(areaId: number, data: CrearObjetivoDto) {
-    const estadosValidos = ['corto', 'medio', 'largo'];
-    if (!estadosValidos.includes(data.plazo)) {
+    if (!PLAZOS.includes(data.plazo)) {
       throw new Error('Plazo no válido. Usa: corto, medio o largo');
     }
 
@@ -60,8 +62,7 @@ export const objetivoService = {
     const objetivo = await repo.findOneBy({ id });
     if (!objetivo) throw new Error('Objetivo no encontrado');
 
-    const estadosValidos = ['pendiente', 'en_proceso', 'conseguido', 'no_trabajado'];
-    if (!estadosValidos.includes(data.estado)) {
+    if (!ESTADOS_OBJETIVO.includes(data.estado)) {
       throw new Error('Estado no válido');
     }
 

@@ -1,7 +1,7 @@
 import { AppDataSource } from '../config/database';
 import { Pai } from '../entities/Pai';
 import { Area } from '../entities/Area';
-import { CrearPaiDto, ActualizarPaiDto, CambiarEstadoPaiDto } from '../dtos/pai.dto';
+import { CrearPaiDto, ActualizarPaiDto, CambiarEstadoPaiDto, ESTADOS_PAI } from '../dtos/pai.dto';
 
 const paiRepo = AppDataSource.getRepository(Pai);
 const areaRepo = AppDataSource.getRepository(Area);
@@ -109,8 +109,7 @@ export const paiService = {
     const pai = await paiRepo.findOneBy({ id });
     if (!pai) throw new Error('PAI no encontrado');
 
-    const estadosValidos = ['borrador', 'activo', 'cerrado'];
-    if (!estadosValidos.includes(data.estado)) {
+    if (!ESTADOS_PAI.includes(data.estado)) {
       throw new Error('Estado no válido');
     }
 

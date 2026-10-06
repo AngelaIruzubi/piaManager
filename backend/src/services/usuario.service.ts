@@ -56,10 +56,20 @@ export const usuarioService = {
     return resultado;
   },
 
-  async darDeBaja(id: number) {
+  async darDeBaja(id: number, usuarioActualId: number) {
+  if (id === usuarioActualId) throw new Error('No puedes dar de baja tu propia cuenta');
+
   const usuario = await repo.findOneBy({ id });
   if (!usuario) throw new Error('Usuario no encontrado');
   if (!usuario.activo) throw new Error('El usuario ya está dado de baja');
+
+  // El centro nunca puede quedarse sin nadie que gestione el equipo
+  if (usuario.rol === 'coordinador') {
+    const coordinadoresActivos = await repo.countBy({ rol: 'coordinador', activo: true });
+    if (coordinadoresActivos <= 1) {
+      throw new Error('No se puede dar de baja al último coordinador activo');
+    }
+  }
 
   // Verificar si tiene personas asignadas activas
   const personaRepo = AppDataSource.getRepository(Persona);

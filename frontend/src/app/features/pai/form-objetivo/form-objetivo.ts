@@ -36,7 +36,8 @@ export class FormObjetivo implements OnInit {
     this.form = this.fb.group({
       descripcion: ['', Validators.required],
       plazo: ['corto', Validators.required],
-      fecha_inicio: [''],
+      // Por defecto hoy; en edición se sustituye por la fecha guardada (aunque esté vacía)
+      fecha_inicio: [new Date().toISOString().split('T')[0]],
       fecha_prevista: [''],
     });
   }

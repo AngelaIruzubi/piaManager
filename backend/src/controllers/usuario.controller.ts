@@ -53,7 +53,7 @@ export const usuarioController = {
 
   async darDeBaja(req: RequestConUsuario, res: Response) {
     try {
-      const result = await usuarioService.darDeBaja(Number(req.params.id));
+      const result = await usuarioService.darDeBaja(Number(req.params.id), req.usuario!.id);
       res.json(result);
     } catch (e: any) {
       res.status(400).json({ mensaje: e.message });
