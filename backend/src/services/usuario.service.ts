@@ -1,3 +1,4 @@
+import { ConflictError, ForbiddenError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Usuario } from '../entities/Usuario';
 import bcrypt from 'bcryptjs';
@@ -27,13 +28,13 @@ export const usuarioService = {
 
   async getById(id: number) {
     const usuario = await repo.findOneBy({ id });
-    if (!usuario) throw new Error('Usuario no encontrado');
+    if (!usuario) throw new NotFoundError('Usuario no encontrado');
     const { password, ...resultado } = usuario;
     return resultado;
   },
   async crear(data: CrearUsuarioDto) {
   const existe = await repo.findOneBy({ email: data.email });
-  if (existe) throw new Error('El email ya está registrado');
+  if (existe) throw new ConflictError('El email ya está registrado');
 
   const hash = await bcrypt.hash(data.password, 10);
   const usuario = repo.create({
@@ -49,7 +50,7 @@ export const usuarioService = {
 
   async actualizar(id: number, data: ActualizarUsuarioDto) {
     const usuario = await repo.findOneBy({ id });
-    if (!usuario) throw new Error('Usuario no encontrado');
+    if (!usuario) throw new NotFoundError('Usuario no encontrado');
     Object.assign(usuario, data);
     const guardado = await repo.save(usuario);
     const { password, ...resultado } = guardado;
@@ -57,17 +58,17 @@ export const usuarioService = {
   },
 
   async darDeBaja(id: number, usuarioActualId: number) {
-  if (id === usuarioActualId) throw new Error('No puedes dar de baja tu propia cuenta');
+  if (id === usuarioActualId) throw new ForbiddenError('No puedes dar de baja tu propia cuenta');
 
   const usuario = await repo.findOneBy({ id });
-  if (!usuario) throw new Error('Usuario no encontrado');
-  if (!usuario.activo) throw new Error('El usuario ya está dado de baja');
+  if (!usuario) throw new NotFoundError('Usuario no encontrado');
+  if (!usuario.activo) throw new ConflictError('El usuario ya está dado de baja');
 
   // El centro nunca puede quedarse sin nadie que gestione el equipo
   if (usuario.rol === 'coordinador') {
     const coordinadoresActivos = await repo.countBy({ rol: 'coordinador', activo: true });
     if (coordinadoresActivos <= 1) {
-      throw new Error('No se puede dar de baja al último coordinador activo');
+      throw new ConflictError('No se puede dar de baja al último coordinador activo');
     }
   }
 
@@ -78,7 +79,7 @@ export const usuarioService = {
   });
 
   if (personasAsignadas.length > 0) {
-    throw new Error(
+    throw new ConflictError(
       `No se puede dar de baja. Tiene ${personasAsignadas.length} persona/s asignada/s. Reasígnalas primero.`
     );
   }

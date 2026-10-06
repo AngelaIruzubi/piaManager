@@ -1,3 +1,4 @@
+import { NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Persona } from '../entities/Persona';
 import { CrearPersonaDto, ActualizarPersonaDto } from '../dtos/personas.dto';
@@ -32,7 +33,7 @@ export const personasService = {
         where: { id },
         relations: { profesional_referencia: true }
     });
-    if (!persona) throw new Error('Persona no encontrada');
+    if (!persona) throw new NotFoundError('Persona no encontrada');
     return sinPasswordReferencia(persona);
     },
 
@@ -53,7 +54,7 @@ export const personasService = {
 
   async actualizar(id: number, data: ActualizarPersonaDto) {
     const persona = await repo.findOneBy({ id });
-    if (!persona) throw new Error('Persona no encontrada');
+    if (!persona) throw new NotFoundError('Persona no encontrada');
     const { profesional_referencia_id, ...resto } = data;
     Object.assign(persona, resto);
     if (profesional_referencia_id !== undefined) {
@@ -64,7 +65,7 @@ export const personasService = {
 
   async darDeBaja(id: number) {
     const persona = await repo.findOneBy({ id });
-    if (!persona) throw new Error('Persona no encontrada');
+    if (!persona) throw new NotFoundError('Persona no encontrada');
     persona.activo = false;
     persona.fecha_baja = new Date();
     return await repo.save(persona);

@@ -1,3 +1,4 @@
+import { BadRequestError, ConflictError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Objetivo } from '../entities/Objetivo';
 import {
@@ -22,7 +23,7 @@ export const objetivoService = {
       where: { id },
       relations: { medios: true, seguimientos: true, area: true, pictogramas: true }
     });
-    if (!objetivo) throw new Error('Objetivo no encontrado');
+    if (!objetivo) throw new NotFoundError('Objetivo no encontrado');
 
     return {
       ...objetivo,
@@ -37,7 +38,7 @@ export const objetivoService = {
 
   async crear(areaId: number, data: CrearObjetivoDto) {
     if (!PLAZOS.includes(data.plazo)) {
-      throw new Error('Plazo no válido. Usa: corto, medio o largo');
+      throw new BadRequestError('Plazo no válido. Usa: corto, medio o largo');
     }
 
     const objetivo = repo.create({
@@ -53,22 +54,22 @@ export const objetivoService = {
 
   async actualizar(id: number, data: ActualizarObjetivoDto) {
     const objetivo = await repo.findOneBy({ id });
-    if (!objetivo) throw new Error('Objetivo no encontrado');
+    if (!objetivo) throw new NotFoundError('Objetivo no encontrado');
     Object.assign(objetivo, data);
     return await repo.save(objetivo);
   },
 
   async cambiarEstado(id: number, data: CambiarEstadoObjetivoDto) {
     const objetivo = await repo.findOneBy({ id });
-    if (!objetivo) throw new Error('Objetivo no encontrado');
+    if (!objetivo) throw new NotFoundError('Objetivo no encontrado');
 
     if (!ESTADOS_OBJETIVO.includes(data.estado)) {
-      throw new Error('Estado no válido');
+      throw new BadRequestError('Estado no válido');
     }
 
     // Un objetivo conseguido no puede volver a pendiente
     if (objetivo.estado === 'conseguido' && data.estado === 'pendiente') {
-      throw new Error('No se puede revertir un objetivo conseguido');
+      throw new ConflictError('No se puede revertir un objetivo conseguido');
     }
 
     objetivo.estado = data.estado;
@@ -85,9 +86,9 @@ export const objetivoService = {
 
   async eliminar(id: number) {
     const objetivo = await repo.findOneBy({ id });
-    if (!objetivo) throw new Error('Objetivo no encontrado');
+    if (!objetivo) throw new NotFoundError('Objetivo no encontrado');
     if (objetivo.estado === 'conseguido') {
-      throw new Error('No se puede eliminar un objetivo conseguido');
+      throw new ConflictError('No se puede eliminar un objetivo conseguido');
     }
     await repo.remove(objetivo);
     return { mensaje: 'Objetivo eliminado correctamente' };

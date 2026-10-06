@@ -1,3 +1,4 @@
+import { ConflictError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Asignacion } from '../entities/Asignacion';
 import { AsignarEducadorDto } from '../dtos/asignacion.dto';
@@ -45,8 +46,8 @@ export const asignacionService = {
 
   async finalizar(id: number) {
     const asignacion = await repo.findOneBy({ id });
-    if (!asignacion) throw new Error('Asignación no encontrada');
-    if (asignacion.fecha_fin) throw new Error('La asignación ya está finalizada');
+    if (!asignacion) throw new NotFoundError('Asignación no encontrada');
+    if (asignacion.fecha_fin) throw new ConflictError('La asignación ya está finalizada');
 
     asignacion.fecha_fin = new Date();
     return await repo.save(asignacion);

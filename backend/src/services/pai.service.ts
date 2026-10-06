@@ -1,3 +1,4 @@
+import { BadRequestError, ConflictError, NotFoundError } from '../errors';
 import { AppDataSource } from '../config/database';
 import { Pai } from '../entities/Pai';
 import { Area } from '../entities/Area';
@@ -60,7 +61,7 @@ export const paiService = {
         creado_por: true
       }
     });
-    if (!pai) throw new Error('PAI no encontrado');
+    if (!pai) throw new NotFoundError('PAI no encontrado');
     return sanearPai(pai);
   },
 
@@ -69,7 +70,7 @@ export const paiService = {
     const existe = await paiRepo.findOne({
       where: { persona: { id: personaId }, anio: data.anio }
     });
-    if (existe) throw new Error('Ya existe un PAI para ese año');
+    if (existe) throw new ConflictError('Ya existe un PAI para ese año');
 
     // Crear el PAI
     const pai = paiRepo.create({
@@ -100,17 +101,17 @@ export const paiService = {
 
   async actualizar(id: number, data: ActualizarPaiDto) {
     const pai = await paiRepo.findOneBy({ id });
-    if (!pai) throw new Error('PAI no encontrado');
+    if (!pai) throw new NotFoundError('PAI no encontrado');
     Object.assign(pai, data);
     return await paiRepo.save(pai);
   },
 
   async cambiarEstado(id: number, data: CambiarEstadoPaiDto) {
     const pai = await paiRepo.findOneBy({ id });
-    if (!pai) throw new Error('PAI no encontrado');
+    if (!pai) throw new NotFoundError('PAI no encontrado');
 
     if (!ESTADOS_PAI.includes(data.estado)) {
-      throw new Error('Estado no válido');
+      throw new BadRequestError('Estado no válido');
     }
 
     pai.estado = data.estado;
