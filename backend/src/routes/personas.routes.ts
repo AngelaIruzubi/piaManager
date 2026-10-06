@@ -3,13 +3,14 @@ import { personasController } from '../controllers/personas.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { soloCoordinador } from '../middlewares/roles.middleware';
 import { validarDto } from '../middlewares/validar.middleware';
+import { accesoPersona, personaPorId } from '../middlewares/acceso.middleware';
 import { CrearPersonaDto, ActualizarPersonaDto } from '../dtos/personas.dto';
 
 const router = Router();
 
-// Ambos roles
+// Ambos roles (el listado ya filtra por educador en el servicio)
 router.get('/', authMiddleware, personasController.getAll);
-router.get('/:id', authMiddleware, personasController.getById);
+router.get('/:id', authMiddleware, accesoPersona(personaPorId('id')), personasController.getById);
 router.put('/:id', authMiddleware, soloCoordinador, validarDto(ActualizarPersonaDto), personasController.actualizar);
 
 // Solo coordinador
