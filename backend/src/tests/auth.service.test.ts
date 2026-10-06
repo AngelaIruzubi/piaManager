@@ -86,6 +86,22 @@ describe('authService', () => {
       expect(result.nombre).toBe('Ana');
     });
 
+    it('el token lleva nombre y apellidos (para la barra superior tras recargar) y nunca la contraseña', async () => {
+      const hash = await bcrypt.hash('123456', 10);
+      mockRepo.findOneBy.mockResolvedValue({
+        id: 1, email: 'ana@pia.com', password: hash, rol: 'coordinador',
+        nombre: 'Ana', apellidos: 'García', activo: true
+      });
+      process.env.JWT_SECRET = 'test_secret';
+
+      const { token } = await authService.login({ email: 'ana@pia.com', password: '123456' });
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+
+      expect(payload.nombre).toBe('Ana');
+      expect(payload.apellidos).toBe('García');
+      expect(payload.password).toBeUndefined();
+    });
+
   });
 
 });

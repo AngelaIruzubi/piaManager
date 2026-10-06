@@ -7,7 +7,7 @@
       PIA Manager
     </div>
     <div class="navbar-info" *ngIf="usuario$ | async as usuario">
-      {{ usuario.nombre }} — {{ usuario.rol }}
+      {{ usuario.nombre }} {{ usuario.apellidos }} · {{ etiquetaRol(usuario.rol) }}
     </div>
     <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
   </nav>

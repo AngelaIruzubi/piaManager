@@ -20,11 +20,15 @@ export const authService = {
     if (!usuario.activo) throw new UnauthorizedError('Credenciales incorrectas');
 
     const token = (jwt.sign as Function)(
-      { id: usuario.id, email: usuario.email, rol: usuario.rol },
+      // El token se puede leer (no está cifrado, solo firmado): nada sensible aquí
+      {
+        id: usuario.id, email: usuario.email, rol: usuario.rol,
+        nombre: usuario.nombre, apellidos: usuario.apellidos
+      },
       process.env.JWT_SECRET!,
       { expiresIn: process.env.JWT_EXPIRES_IN || '8h' }
     );
 
-    return { token, rol: usuario.rol, nombre: usuario.nombre };
+    return { token, rol: usuario.rol, nombre: usuario.nombre, apellidos: usuario.apellidos };
   }
 };

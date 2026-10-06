@@ -26,6 +26,12 @@ export class App {
     return this.authService.esCoordinador();
   }
 
+  // Texto para mostrar en lugar del código interno del rol
+  etiquetaRol(rol: string): string {
+    const etiquetas: Record<string, string> = { coordinador: 'Coordinación', educador: 'Educador' };
+    return etiquetas[rol] ?? rol;
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);

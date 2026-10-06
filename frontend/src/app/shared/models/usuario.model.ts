@@ -13,4 +13,5 @@ export interface LoginResponse {
   token: string;
   rol: string;
   nombre: string;
+  apellidos: string;
 }
