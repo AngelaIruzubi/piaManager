@@ -53,6 +53,6 @@ export class AuthService {
 
   private decodificarToken(token: string): LoginResponse {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return { token, rol: payload.rol, nombre: payload.nombre ?? '' };
+    return { token, rol: payload.rol, nombre: payload.nombre ?? '', apellidos: payload.apellidos ?? '' };
   }
 }

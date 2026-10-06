@@ -1,5 +1,11 @@
 {
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n back,front -c magenta,cyan \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "dev:db": "docker compose up -d db && npm run dev"
+  },
   "devDependencies": {
-    "@types/node": "^26.0.1"
+    "@types/node": "^26.0.1",
+    "concurrently": "^10.0.5"
   }
 }
