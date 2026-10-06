@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty, IsIn, MaxLength, IsOptional } from 'class-validator';
 
-export const TIPOS_MEDIO = ['material', 'persona_apoyo', 'tecnica', 'adaptacion_entorno'];
+// Mismos códigos que el catálogo TIPO_MEDIO (config/seed.ts)
+export const TIPOS_MEDIO = ['material', 'persona_apoyo', 'tecnica', 'adaptacion'];
 
 export class CrearMedioDto {
   @IsIn(TIPOS_MEDIO, { message: `Tipo no válido. Usa: ${TIPOS_MEDIO.join(', ')}` })
