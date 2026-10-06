@@ -1,13 +1,15 @@
 import {
   Entity, PrimaryGeneratedColumn, Column,
   CreateDateColumn, UpdateDateColumn,
-  ManyToOne, JoinColumn, OneToMany
+  ManyToOne, JoinColumn, OneToMany, Unique
 } from 'typeorm';
 import { Persona } from './Persona';
 import { Usuario } from './Usuario';
 import { Area } from './Area';
 
+// Un solo PAI por persona y año, garantizado por la base de datos (evita duplicados por peticiones simultáneas)
 @Entity('pai')
+@Unique('UQ_pai_persona_anio', ['persona', 'anio'])
 export class Pai {
   @PrimaryGeneratedColumn()
   id: number;

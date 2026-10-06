@@ -5,7 +5,6 @@ import { Area } from '../entities/Area';
 import { CrearPaiDto, ActualizarPaiDto, CambiarEstadoPaiDto, ESTADOS_PAI } from '../dtos/pai.dto';
 
 const paiRepo = AppDataSource.getRepository(Pai);
-const areaRepo = AppDataSource.getRepository(Area);
 
 const AREAS_FIJAS = [
   'autonomia', 'cognitiva', 'social', 'ocupacional', 'salud'
@@ -72,29 +71,29 @@ export const paiService = {
     });
     if (existe) throw new ConflictError('Ya existe un PAI para ese año');
 
-    // Crear el PAI
-    const pai = paiRepo.create({
-      persona: { id: personaId } as any,
-      creado_por: { id: creadoPorId } as any,
-      anio: data.anio,
-      fecha_inicio: new Date(data.fecha_inicio),
-      fecha_revision: data.fecha_revision ? new Date(data.fecha_revision) : undefined,
-      observaciones_generales: data.observaciones_generales,
-      estado: 'borrador'
-    });
-    await paiRepo.save(pai);
+    // Transacción: el PAI y sus 5 áreas se guardan todos o ninguno.
+    // Si falla cualquier paso, PostgreSQL deshace lo anterior y no queda un PAI a medias
+    const paiId = await AppDataSource.transaction(async manager => {
+      const pai = await manager.save(manager.create(Pai, {
+        persona: { id: personaId } as any,
+        creado_por: { id: creadoPorId } as any,
+        anio: data.anio,
+        fecha_inicio: new Date(data.fecha_inicio),
+        fecha_revision: data.fecha_revision ? new Date(data.fecha_revision) : undefined,
+        observaciones_generales: data.observaciones_generales,
+        estado: 'borrador'
+      }));
 
-    // Generar automáticamente las 5 áreas
-    for (const tipo of AREAS_FIJAS) {
-      const area = areaRepo.create({
-        pai: { id: pai.id } as any,
-        tipo
-      });
-      await areaRepo.save(area);
-    }
+      // Generar automáticamente las 5 áreas
+      for (const tipo of AREAS_FIJAS) {
+        await manager.save(manager.create(Area, { pai: { id: pai.id } as any, tipo }));
+      }
+
+      return pai.id;
+    });
 
     return await paiRepo.findOne({
-      where: { id: pai.id },
+      where: { id: paiId },
       relations: { areas: true, persona: true }
     });
   },
