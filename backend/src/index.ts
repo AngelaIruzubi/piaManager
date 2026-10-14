@@ -14,6 +14,7 @@ import seguimientoRoutes from './routes/seguimiento.routes';
 import asignacionRoutes from './routes/asignacion.routes';
 import usuarioRoutes from './routes/usuario.routes';
 import pictogramaRoutes from './routes/pictograma.routes';
+import catalogoRoutes from './routes/catalogo.routes';
 import { rutaNoEncontrada, manejadorErrores } from './middlewares/errores.middleware';
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,6 +51,7 @@ app.use('/api/asignaciones', asignacionRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/pictogramas', pictogramaRoutes);
 app.use('/api/objetivos', pictogramaRoutes);
+app.use('/api/catalogos', catalogoRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'PIA Manager API funcionando 🚀' });

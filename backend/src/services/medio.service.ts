@@ -31,7 +31,8 @@ export const medioService = {
   async actualizar(id: number, data: ActualizarMedioDto) {
     const medio = await repo.findOneBy({ id });
     if (!medio) throw new NotFoundError('Medio no encontrado');
-    Object.assign(medio, data);
+    // PUT reemplaza el medio: si no llega responsable (se vació en el formulario), se borra
+    Object.assign(medio, data, { responsable: data.responsable ?? null });
     return await repo.save(medio);
   },
 
