@@ -2,6 +2,13 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Sin la clave para firmar los tokens, todos los logins fallarían más tarde con un error confuso:
+// mejor parar al arrancar con un mensaje claro
+if (!process.env.JWT_SECRET) {
+  console.error('❌ Falta la variable JWT_SECRET en el .env. El backend no puede arrancar sin ella.');
+  process.exit(1);
+}
+
 import express from 'express';
 import cors from 'cors';
 import { AppDataSource } from './config/database';
@@ -19,9 +26,9 @@ import { rutaNoEncontrada, manejadorErrores } from './middlewares/errores.middle
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS debe ser lo primero
+// CORS debe ser lo primero. Origen permitido configurable por entorno (por defecto, el frontend de desarrollo)
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
 }));
