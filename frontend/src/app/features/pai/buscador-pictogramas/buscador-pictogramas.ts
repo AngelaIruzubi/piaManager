@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -20,7 +21,7 @@ export class BuscadorPictogramas implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private fb = inject(FormBuilder);
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
 
   objetivoId: number = 0;
   objetivo: any = null;

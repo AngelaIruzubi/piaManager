@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
@@ -6,7 +7,7 @@ import { LoginResponse } from '../../shared/models/usuario.model';
 @Injectable({ providedIn: 'root' }) //Servicio de Angular, clase reutilizable con lógica
 export class AuthService {
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
   private tokenKey = 'pia_token';
 
   private usuarioActual = new BehaviorSubject<LoginResponse | null>(null); //Variable reactiva que almacena el usuario actual

@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +20,7 @@ export class ObjetivoDetalle implements OnInit {
   private location = inject(Location);
   private cdr = inject(ChangeDetectorRef);
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
 
   objetivoId: number = 0;
   objetivo: any = null;

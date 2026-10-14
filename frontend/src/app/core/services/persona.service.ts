@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Persona } from '../../shared/models/persona.model';
@@ -5,7 +6,7 @@ import { Persona } from '../../shared/models/persona.model';
 @Injectable({ providedIn: 'root' })
 export class PersonasService {
 
-  private apiUrl = 'http://localhost:3000/api/personas';
+  private apiUrl = `${environment.apiUrl}/personas`;
 
   constructor(private http: HttpClient) {}
 
