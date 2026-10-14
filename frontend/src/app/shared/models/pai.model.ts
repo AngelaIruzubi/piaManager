@@ -33,7 +33,12 @@ export interface Medio {
   id: number;
   tipo: string;
   descripcion: string;
-  responsable?: string;
+  responsable?: string | null;
+}
+
+export interface ValorCatalogo {
+  codigo: string;
+  descripcion: string;
 }
 
 export interface Seguimiento {

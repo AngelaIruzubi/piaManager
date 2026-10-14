@@ -2,11 +2,12 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { MediosObjetivo } from '../medios-objetivo/medios-objetivo';
 
 @Component({
   selector: 'app-objetivo-detalle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MediosObjetivo],
   templateUrl: './objetivo-detalle.html',
   styleUrl: './objetivo-detalle.scss'
 })
