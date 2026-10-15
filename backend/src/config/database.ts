@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import path from 'path';
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import { Usuario } from '../entities/Usuario';
@@ -21,7 +22,10 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  synchronize: true,
-  logging: true,
+  // El esquema ya no se modifica solo al arrancar: cada cambio es una migración versionada en git
+  synchronize: false,
+  migrations: [path.join(__dirname, '../migrations/*.{ts,js}')],
+  migrationsRun: true, // al arrancar se aplican las migraciones pendientes
+  logging: process.env.DB_LOGGING === 'true' ? true : ['error', 'migration'],
   entities: [Usuario,Catalogo, Persona, Asignacion, Pai, Area, Objetivo, Medio, Seguimiento, ObjetivoPictograma],
 });
