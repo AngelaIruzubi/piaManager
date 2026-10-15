@@ -83,9 +83,11 @@ export class FormObjetivo implements OnInit {
         }
       });
     } else {
-      this.http.post(`${this.apiUrl}/areas/${this.areaId}/objetivos`, this.form.value).subscribe({
-        next: () => {
-          this.volver();
+      this.http.post<{ id: number }>(`${this.apiUrl}/areas/${this.areaId}/objetivos`, this.form.value).subscribe({
+        next: (creado) => {
+          // Al detalle del nuevo objetivo para seguir con medios, pictogramas u observaciones.
+          // replaceUrl quita el formulario del historial: "Volver al PAI" no regresa al formulario vacío
+          this.router.navigate(['/objetivos', creado.id], { replaceUrl: true });
         },
         error: (err: any) => {
           this.error = err.error?.mensaje || 'Error al crear el objetivo';
