@@ -8,6 +8,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "ts-node src/config/seed.ts",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/database.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/config/database.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts",
+    "migration:show": "typeorm-ts-node-commonjs migration:show -d src/config/database.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
