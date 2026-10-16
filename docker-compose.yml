@@ -1,18 +1,79 @@
-version: '3.8'
+# piaManager completo con un solo comando:
+#   docker compose up -d --build   → http://localhost:8080
+#   docker compose down            → apaga (los datos se conservan en el volumen)
+#
+# Para programar en local basta con la base de datos: npm run dev:db
+# Las variables (contraseñas, JWT_SECRET) vienen del .env de la raíz (plantilla: .env.example)
+
+name: piamanager
 
 services:
+
+  # Base de datos. El puerto 5432 se publica para el desarrollo en local (npm run dev:db)
   db:
     image: postgres:16
     container_name: pia_postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: pia_user
-      POSTGRES_PASSWORD: pia_password
-      POSTGRES_DB: pia_manager
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER en el .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en el .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Falta POSTGRES_DB en el .env}
     ports:
       - "5432:5432"
     volumes:
       - pia_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # API en Node. Sin puertos publicados: solo se llega a ella a través de nginx (frontend)
+  backend:
+    build: ./backend
+    image: pia-backend
+    container_name: pia_backend
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET:?Falta JWT_SECRET en el .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      CORS_ORIGIN: http://localhost:${APP_PORT:-8080}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 2s
+
+  # Angular servido por nginx, que además pasa /api al backend. Es lo único abierto al exterior
+  frontend:
+    build: ./frontend
+    image: pia-frontend
+    container_name: pia_frontend
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+      start_interval: 2s
 
 volumes:
+  # El mismo volumen que ya usabas: la app en Docker ve tus datos actuales
   pia_db_data:
