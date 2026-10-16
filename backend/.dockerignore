@@ -1,0 +1,17 @@
+# Lo que NO entra en la imagen de Docker
+
+# Se instalan dentro del contenedor con npm ci
+node_modules
+
+# Se compila dentro del contenedor
+dist
+
+# Secretos: las variables de entorno se pasan al arrancar el contenedor, nunca van en la imagen
+.env
+.env.*
+!.env.example
+
+# No hacen falta para ejecutar la app
+coverage
+*.log
+nodemon.json
