@@ -1,0 +1,11 @@
+# Lo que NO entra en la imagen de Docker
+
+# Se instalan y se compilan dentro del contenedor
+node_modules
+dist
+.angular
+
+# Configuración del editor y otros que no hacen falta para compilar
+.vscode
+coverage
+*.log
