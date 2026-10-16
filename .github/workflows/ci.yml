@@ -7,9 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
+
   backend:
     name: Backend — Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - name: Checkout del código
@@ -18,14 +22,87 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
+      # npm ci: instala exactamente las versiones del lock (reproducible)
       - name: Instalar dependencias
-        working-directory: backend
-        run: npm install
+        run: npm ci
 
       - name: Ejecutar tests
-        working-directory: backend
         run: npm test
+
+  frontend:
+    name: Frontend — Build de producción
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar en modo producción
+        run: npx ng build --configuration production
+
+  # Solo si backend y frontend están bien: construye las imágenes Docker.
+  # En los pull requests solo comprueba que se construyen; al fusionar en main, además las publica en ghcr.io
+  docker:
+    name: Docker — ${{ matrix.servicio }}
+    needs: [ backend, frontend ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        servicio: [ backend, frontend ]
+    env:
+      PUBLICAR: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Preparar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Iniciar sesión en GitHub Container Registry
+        if: env.PUBLICAR == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Etiquetas: "latest" (solo en main) y el SHA del commit, para saber qué código lleva cada imagen
+      - name: Calcular nombre y etiquetas de la imagen
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/pia-${{ matrix.servicio }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+
+      - name: Construir (y publicar en main)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.servicio }}
+          push: ${{ env.PUBLICAR == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.servicio }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.servicio }}
