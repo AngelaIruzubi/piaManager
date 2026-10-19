@@ -33,6 +33,11 @@ jobs:
       - name: Ejecutar tests
         run: npm test
 
+      # Vulnerabilidades en las librerías de producción (incluidas las transitivas). Solo avisa
+      - name: Auditoría de dependencias (npm audit)
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
   frontend:
     name: Frontend — Build de producción
     runs-on: ubuntu-latest
@@ -57,8 +62,13 @@ jobs:
       - name: Compilar en modo producción
         run: npx ng build --configuration production
 
-  # Solo si backend y frontend están bien: construye las imágenes Docker.
-  # En los pull requests solo comprueba que se construyen; al fusionar en main, además las publica en ghcr.io
+      # Vulnerabilidades en las librerías de producción (incluidas las transitivas). Solo avisa
+      - name: Auditoría de dependencias (npm audit)
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
+  # Solo si backend y frontend están bien: construye las imágenes Docker y las escanea con Trivy.
+  # En los pull requests solo construye y escanea; al fusionar en main, además las publica en ghcr.io
   docker:
     name: Docker — ${{ matrix.servicio }}
     needs: [ backend, frontend ]
@@ -66,6 +76,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write   # para subir los resultados de Trivy a la pestaña Security
     strategy:
       matrix:
         servicio: [ backend, frontend ]
@@ -96,6 +107,46 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
+
+      # La imagen se construye primero en la máquina del CI (load) para que Trivy pueda revisarla por dentro
+      - name: Construir la imagen para escanearla
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.servicio }}
+          load: true
+          push: false
+          tags: pia-${{ matrix.servicio }}:escaneo
+          cache-from: type=gha,scope=${{ matrix.servicio }}
+
+      # Trivy revisa TODA la imagen: librerías de npm, sistema operativo (Alpine) y runtime (Node o nginx).
+      # Solo gravedad alta o crítica con arreglo disponible. Solo avisa (exit-code 0)
+      - name: Escanear la imagen con Trivy (tabla en el log)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: pia-${{ matrix.servicio }}:escaneo
+          format: table
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '0'
+
+      - name: Escanear la imagen con Trivy (informe SARIF)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: pia-${{ matrix.servicio }}:escaneo
+          format: sarif
+          output: trivy-${{ matrix.servicio }}.sarif
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '0'
+          skip-setup-trivy: true   # Trivy ya está instalado por el paso anterior
+
+      # El informe aparece en GitHub → Security → Code scanning
+      - name: Subir los resultados a la pestaña Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-${{ matrix.servicio }}.sarif
+          category: imagen-${{ matrix.servicio }}
 
       - name: Construir (y publicar en main)
         uses: docker/build-push-action@v6
