@@ -7,6 +7,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     'src/index.ts',
     'src/config/',
-    'src/entities/'
+    'src/entities/',
+    'src/migrations/'
   ]
 };
