@@ -30,13 +30,48 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Ejecutar tests
-        run: npm test
+      # Los mismos tests, generando además el informe de cobertura (backend/coverage/lcov.info)
+      - name: Ejecutar tests con cobertura
+        run: npm run test:coverage
+
+      # Cada job corre en una máquina distinta: el informe se guarda como artefacto para el job de SonarQube
+      - name: Guardar el informe de cobertura
+        uses: actions/upload-artifact@v7
+        with:
+          name: cobertura-backend
+          path: backend/coverage/lcov.info
+          retention-days: 7
 
       # Vulnerabilidades en las librerías de producción (incluidas las transitivas). Solo avisa
       - name: Auditoría de dependencias (npm audit)
         continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
+
+  # Análisis estático del código (bugs, vulnerabilidades, hotspots, code smells, duplicación) y cobertura
+  sonarqube:
+    name: SonarQube — Calidad del código
+    needs: [ backend ]
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    steps:
+      # Todo el historial: SonarQube lo necesita para saber qué líneas son nuevas en cada PR
+      - name: Checkout del código (historial completo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Recoger el informe de cobertura del backend
+        uses: actions/download-artifact@v8
+        with:
+          name: cobertura-backend
+          path: backend/coverage
+
+      # Los PRs de Dependabot no tienen acceso a los secretos: sin token, el análisis se salta en lugar de fallar
+      - name: Analizar con SonarQube Cloud
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@v8
 
   frontend:
     name: Frontend — Build de producción
