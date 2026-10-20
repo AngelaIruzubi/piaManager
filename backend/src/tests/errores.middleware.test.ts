@@ -1,4 +1,4 @@
-import { manejadorErrores, rutaNoEncontrada } from '../middlewares/errores.middleware';
+import { manejadorErrores, rutaNoEncontrada, paraLog } from '../middlewares/errores.middleware';
 import {
   BadRequestError, UnauthorizedError, ForbiddenError,
   NotFoundError, ConflictError, BadGatewayError
@@ -62,6 +62,38 @@ describe('manejadorErrores', () => {
     manejadorErrores({ type: 'entity.parse.failed' }, req, res, jest.fn());
 
     expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+});
+
+describe('paraLog (contra log injection)', () => {
+
+  it('cambia los saltos de línea por espacios para que no se puedan inventar líneas en el log', () => {
+    const malicioso = '/api/personas\n✅ Login correcto del usuario admin';
+    expect(paraLog(malicioso)).not.toContain('\n');
+    expect(paraLog(malicioso)).toBe('/api/personas ✅ Login correcto del usuario admin');
+  });
+
+  it('limpia también retornos de carro y tabuladores', () => {
+    expect(paraLog('a\r\nb\tc')).toBe('a  b c');
+  });
+
+  it('recorta los textos muy largos', () => {
+    expect(paraLog('x'.repeat(1000))).toHaveLength(300);
+  });
+
+  it('deja intacto un texto normal', () => {
+    expect(paraLog('/api/objetivos/5?campo=valor')).toBe('/api/objetivos/5?campo=valor');
+  });
+
+  it('el manejador escribe en el log la URL ya limpia', () => {
+    const consola = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const reqMaliciosa: any = { method: 'GET', originalUrl: '/api/x\nLínea falsa' };
+
+    manejadorErrores(new Error('fallo'), reqMaliciosa, crearRes(), jest.fn());
+
+    expect(consola.mock.calls[0][0]).toBe('❌ Error en GET /api/x Línea falsa:');
+    consola.mockRestore();
   });
 
 });

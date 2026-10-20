@@ -24,6 +24,9 @@ import pictogramaRoutes from './routes/pictograma.routes';
 import catalogoRoutes from './routes/catalogo.routes';
 import { rutaNoEncontrada, manejadorErrores } from './middlewares/errores.middleware';
 const app = express();
+
+// Express añade por defecto "X-Powered-By: Express" a cada respuesta: no hace falta anunciar la tecnología
+app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 
 // CORS debe ser lo primero. Origen permitido configurable por entorno (por defecto, el frontend de desarrollo)
