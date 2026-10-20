@@ -15,6 +15,12 @@ RUN npx ng build --configuration production
 # nginx sin privilegios de administrador: escucha en el puerto 8080
 FROM nginxinc/nginx-unprivileged:stable-alpine AS runtime
 
+# Parches de seguridad del sistema operativo (Alpine) publicados después de la imagen base.
+# Hace falta ser root solo para esto; enseguida se vuelve al usuario sin privilegios de nginx (101)
+USER root
+RUN apk upgrade --no-cache
+USER 101
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Del "taller" solo nos llevamos los archivos compilados (index.html, .js, .css...)

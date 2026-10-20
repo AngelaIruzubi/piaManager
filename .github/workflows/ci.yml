@@ -179,11 +179,13 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
 
-      # La imagen se construye primero en la máquina del CI (load) para que Trivy pueda revisarla por dentro
+      # La imagen se construye primero en la máquina del CI (load) para que Trivy pueda revisarla por dentro.
+      # pull: descarga siempre la versión más reciente de la imagen base (con sus últimos parches)
       - name: Construir la imagen para escanearla
         uses: docker/build-push-action@v6
         with:
           context: ./${{ matrix.servicio }}
+          pull: true
           load: true
           push: false
           tags: pia-${{ matrix.servicio }}:escaneo
@@ -223,6 +225,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./${{ matrix.servicio }}
+          pull: true
           push: ${{ env.PUBLICAR == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
