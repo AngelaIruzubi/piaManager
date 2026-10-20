@@ -20,6 +20,7 @@
     <form [formGroup]="form" (ngSubmit)="buscar()">
       <div class="input-grupo">
         <input type="text" formControlName="keyword"
+               aria-label="Palabra para buscar pictogramas"
                placeholder="Ej: vestir, comer, comunicar..."
                (keyup.enter)="buscar()" />
         <button type="submit" [disabled]="buscando">

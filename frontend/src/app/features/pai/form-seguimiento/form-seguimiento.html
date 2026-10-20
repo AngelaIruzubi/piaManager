@@ -16,12 +16,12 @@
 
     <div class="fila">
       <div class="campo">
-        <label>Fecha *</label>
-        <input type="date" formControlName="fecha" />
+        <label for="seguimiento-fecha">Fecha *</label>
+        <input id="seguimiento-fecha" type="date" formControlName="fecha" />
       </div>
       <div class="campo">
-        <label>Porcentaje de logro * (0-100)</label>
-        <input type="number" formControlName="porcentaje_logro"
+        <label for="seguimiento-porcentaje">Porcentaje de logro * (0-100)</label>
+        <input id="seguimiento-porcentaje" type="number" formControlName="porcentaje_logro"
                min="0" max="100" />
         <div class="porcentaje-visual">
           <div class="barra">
@@ -35,8 +35,8 @@
     </div>
 
     <div class="campo">
-      <label>Observación *</label>
-      <textarea formControlName="observacion" rows="4"
+      <label for="seguimiento-observacion">Observación *</label>
+      <textarea id="seguimiento-observacion" formControlName="observacion" rows="4"
         placeholder="Describe la evolución del objetivo..."></textarea>
     </div>
 

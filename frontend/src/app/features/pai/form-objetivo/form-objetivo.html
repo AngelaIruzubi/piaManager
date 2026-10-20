@@ -7,29 +7,29 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <div class="campo">
-      <label>Descripción *</label>
-      <textarea formControlName="descripcion" rows="3"
+      <label for="objetivo-descripcion">Descripción *</label>
+      <textarea id="objetivo-descripcion" formControlName="descripcion" rows="3"
         placeholder="Ej: Se viste sola con supervisión mínima"></textarea>
     </div>
 
     <div class="fila">
       <div class="campo">
-        <label>Plazo *</label>
-        <select formControlName="plazo">
+        <label for="objetivo-plazo">Plazo *</label>
+        <select id="objetivo-plazo" formControlName="plazo">
           <option *ngFor="let p of plazos" [value]="p">
             {{ p | titlecase }}
           </option>
         </select>
       </div>
       <div class="campo">
-        <label>Fecha prevista</label>
-        <input type="date" formControlName="fecha_prevista" />
+        <label for="objetivo-fecha-prevista">Fecha prevista</label>
+        <input id="objetivo-fecha-prevista" type="date" formControlName="fecha_prevista" />
       </div>
     </div>
 
     <div class="campo">
-      <label>Fecha de inicio</label>
-      <input type="date" formControlName="fecha_inicio" />
+      <label for="objetivo-fecha-inicio">Fecha de inicio</label>
+      <input id="objetivo-fecha-inicio" type="date" formControlName="fecha_inicio" />
     </div>
 
     <div class="error" *ngIf="error">{{ error }}</div>

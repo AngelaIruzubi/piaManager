@@ -27,7 +27,7 @@ export class MediosObjetivo implements OnInit {
   private fb = inject(FormBuilder);
 
   objetivoId = input.required<number>();
-  mediosIniciales = input<Medio[]>([], { alias: 'medios' });
+  mediosIniciales = input<Medio[]>([]);
 
   medios = signal<Medio[]>([]);
   tipos = signal<ValorCatalogo[]>([]);
