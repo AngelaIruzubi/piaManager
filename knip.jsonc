@@ -1,0 +1,28 @@
+// Configuración de knip: detecta dependencias, archivos y exportaciones sin usar.
+// Lo ejecuta el CI en cada PR (job "Librerías no usadas (knip)"). Para lanzarlo en local: npx knip
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+
+  // Los tipos e interfaces que solo se usan dentro de su propio archivo no son código muerto
+  // (por ejemplo, Area u Objetivo en pai.model.ts, que forman parte del tipo Pai)
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+
+  "workspaces": {
+    ".": {},
+
+    "backend": {
+      // Puntos de entrada: dónde empieza el código. Al escribir "entry" se sustituyen los que knip
+      // deduce solo, así que se añade index.ts (arranque del servidor) junto a las migraciones,
+      // que se cargan por patrón desde config/database.ts, no con un import.
+      // El seed no hace falta: knip lo detecta desde el script "npm run seed"
+      "entry": ["src/index.ts", "src/migrations/*.ts"],
+      // Se usarán en los tests de integración de la Fase 3 (Supertest)
+      "ignoreDependencies": ["supertest", "@types/supertest"]
+    },
+
+    "frontend": {}
+  }
+}

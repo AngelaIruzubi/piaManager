@@ -97,10 +97,46 @@ jobs:
       - name: Compilar en modo producción
         run: npx ng build --configuration production
 
+      # Comprueba que el código sigue el estilo de .prettierrc (no cambia nada). Solo avisa
+      - name: Formato del código (Prettier)
+        continue-on-error: true
+        run: npm run format:check
+
       # Vulnerabilidades en las librerías de producción (incluidas las transitivas). Solo avisa
       - name: Auditoría de dependencias (npm audit)
         continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
+
+  # Dependencias, archivos y exportaciones sin usar en las tres partes del proyecto (configuración en knip.jsonc)
+  librerias:
+    name: Librerías no usadas (knip)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      # knip necesita las dependencias instaladas para saber qué se usa
+      - name: Instalar dependencias (raíz, backend y frontend)
+        run: |
+          npm ci
+          npm ci --prefix backend
+          npm ci --prefix frontend
+
+      # Solo avisa: el informe aparece en el log de este paso
+      - name: Buscar librerías y código sin usar
+        continue-on-error: true
+        run: npx knip --no-progress
 
   # Solo si backend y frontend están bien: construye las imágenes Docker y las escanea con Trivy.
   # En los pull requests solo construye y escanea; al fusionar en main, además las publica en ghcr.io
