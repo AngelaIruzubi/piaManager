@@ -11,10 +11,9 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-objetivo.html',
-  styleUrl: './form-objetivo.scss'
+  styleUrl: './form-objetivo.scss',
 })
 export class FormObjetivo implements OnInit {
-
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -60,7 +59,7 @@ export class FormObjetivo implements OnInit {
           this.areaId = data.area?.id;
           this.cdr.detectChanges();
         },
-        error: (_err: any) => {}
+        error: (_err: any) => {},
       });
     }
   }
@@ -80,21 +79,23 @@ export class FormObjetivo implements OnInit {
           this.error = err.error?.mensaje || 'Error al actualizar el objetivo';
           this.cargando = false;
           this.cdr.detectChanges();
-        }
+        },
       });
     } else {
-      this.http.post<{ id: number }>(`${this.apiUrl}/areas/${this.areaId}/objetivos`, this.form.value).subscribe({
-        next: (creado) => {
-          // Al detalle del nuevo objetivo para seguir con medios, pictogramas u observaciones.
-          // replaceUrl quita el formulario del historial: "Volver al PAI" no regresa al formulario vacío
-          this.router.navigate(['/objetivos', creado.id], { replaceUrl: true });
-        },
-        error: (err: any) => {
-          this.error = err.error?.mensaje || 'Error al crear el objetivo';
-          this.cargando = false;
-          this.cdr.detectChanges();
-        }
-      });
+      this.http
+        .post<{ id: number }>(`${this.apiUrl}/areas/${this.areaId}/objetivos`, this.form.value)
+        .subscribe({
+          next: (creado) => {
+            // Al detalle del nuevo objetivo para seguir con medios, pictogramas u observaciones.
+            // replaceUrl quita el formulario del historial: "Volver al PAI" no regresa al formulario vacío
+            this.router.navigate(['/objetivos', creado.id], { replaceUrl: true });
+          },
+          error: (err: any) => {
+            this.error = err.error?.mensaje || 'Error al crear el objetivo';
+            this.cargando = false;
+            this.cdr.detectChanges();
+          },
+        });
     }
   }
 

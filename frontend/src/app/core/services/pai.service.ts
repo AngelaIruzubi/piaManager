@@ -5,7 +5,6 @@ import { Pai } from '../../shared/models/pai.model';
 
 @Injectable({ providedIn: 'root' })
 export class PaiService {
-
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}

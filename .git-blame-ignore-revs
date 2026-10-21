@@ -1,0 +1,6 @@
+# Commits que solo cambian el formato del código.
+# GitHub (y "git blame") los ignoran al mostrar quién escribió cada línea.
+# En local: git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: formatear el frontend con Prettier
+baba68e779fad8560b6e5da55d8c6c90bc959efb

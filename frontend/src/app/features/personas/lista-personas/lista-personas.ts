@@ -5,18 +5,16 @@ import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-
-
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-lista-personas',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [EstadoActivo, CommonModule, RouterLink],
   templateUrl: './lista-personas.html',
-  styleUrl: './lista-personas.scss'
+  styleUrl: './lista-personas.scss',
 })
 export class ListaPersonas implements OnInit {
-
   private personasService = inject(PersonasService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -39,7 +37,7 @@ export class ListaPersonas implements OnInit {
         this.error = 'Error al cargar las personas';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

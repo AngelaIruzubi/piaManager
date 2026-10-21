@@ -38,9 +38,14 @@
   cursor: pointer;
   white-space: nowrap;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { background: var(--purple-600); }
+  &:hover {
+    background: var(--purple-600);
+  }
 }
 
 .grid-tarjetas {
@@ -99,33 +104,16 @@
     color: var(--ink-soft);
     font-size: 1.05rem;
 
-    svg { width: 20px; height: 20px; flex-shrink: 0; }
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
   }
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  width: fit-content;
-
-  svg { width: 16px; height: 16px; }
-
-  &.activo {
-    background: var(--green-bg);
-    color: var(--green);
-  }
-  &.baja {
-    background: var(--red-bg);
-    color: var(--red);
-  }
-}
-
-.cargando, .vacio {
+.cargando,
+.vacio {
   text-align: center;
   color: var(--ink-soft);
   padding: 2rem;

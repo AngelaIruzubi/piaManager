@@ -14,11 +14,10 @@
     ".": {},
 
     "backend": {
-      // Puntos de entrada: dónde empieza el código. Al escribir "entry" se sustituyen los que knip
-      // deduce solo, así que se añade index.ts (arranque del servidor) junto a las migraciones,
-      // que se cargan por patrón desde config/database.ts, no con un import.
-      // El seed no hace falta: knip lo detecta desde el script "npm run seed"
-      "entry": ["src/index.ts", "src/migrations/*.ts"],
+      // Punto de entrada extra: las migraciones se cargan por patrón desde config/database.ts, no con
+      // un import. El resto lo deduce knip solo: el arranque (src/index.ts) desde "main" del
+      // package.json y el seed desde el script "npm run seed"
+      "entry": ["src/migrations/*.ts"],
       // Se usarán en los tests de integración de la Fase 3 (Supertest)
       "ignoreDependencies": ["supertest", "@types/supertest"]
     },

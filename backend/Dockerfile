@@ -19,7 +19,16 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+# 1. Parches de seguridad del sistema operativo (Alpine) publicados después de la imagen base
+# 2. Solo dependencias de producción
+# 3. Quitar los gestores de paquetes (npm, npx, corepack, yarn): la app arranca con "node" y no los
+#    necesita. Son como los andamios: se retiran al terminar, y con ellos sus vulnerabilidades
+RUN apk upgrade --no-cache \
+ && npm ci --omit=dev \
+ && npm cache clean --force \
+ && rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+           /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+           /usr/local/bin/yarn /usr/local/bin/yarnpkg
 
 # Del "taller" solo nos llevamos el resultado compilado
 COPY --from=build /app/dist ./dist

@@ -9,10 +9,9 @@ import { UsuarioService } from '../../../core/services/usuario.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-usuario.html',
-  styleUrl: './form-usuario.scss'
+  styleUrl: './form-usuario.scss',
 })
 export class FormUsuario implements OnInit {
-
   private fb = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
   private route = inject(ActivatedRoute);
@@ -56,7 +55,7 @@ export class FormUsuario implements OnInit {
         error: (_err: any) => {
           this.error = 'Error al cargar el educador';
           this.cdr.detectChanges();
-        }
+        },
       });
     }
   }
@@ -79,7 +78,7 @@ export class FormUsuario implements OnInit {
         this.error = err.error?.mensaje || 'Error al guardar el educador';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

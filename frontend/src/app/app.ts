@@ -9,10 +9,9 @@ import { inject } from '@angular/core';
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
-
   private authService = inject(AuthService);
   private router = inject(Router);
 

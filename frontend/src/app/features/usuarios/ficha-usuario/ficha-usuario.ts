@@ -3,16 +3,16 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-ficha-usuario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [EstadoActivo, CommonModule],
   templateUrl: './ficha-usuario.html',
-  styleUrl: './ficha-usuario.scss'
+  styleUrl: './ficha-usuario.scss',
 })
 export class FichaUsuario implements OnInit {
-
   private usuarioService = inject(UsuarioService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -35,7 +35,7 @@ export class FichaUsuario implements OnInit {
         this.error = 'Error al cargar el educador';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -57,7 +57,7 @@ export class FichaUsuario implements OnInit {
       },
       error: (err: any) => {
         alert(err?.error?.mensaje || 'Error al dar de baja al educador');
-      }
+      },
     });
   }
 }

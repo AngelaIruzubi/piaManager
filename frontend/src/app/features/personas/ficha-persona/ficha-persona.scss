@@ -16,9 +16,14 @@
   padding: 0;
   margin-bottom: 1.75rem;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { color: var(--purple-900); }
+  &:hover {
+    color: var(--purple-900);
+  }
 }
 
 .cabecera-persona {
@@ -80,16 +85,23 @@
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 20px; height: 20px; }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
 .btn-peligro {
   border-color: var(--red);
   color: var(--red);
 
-  &:hover { background: var(--red-bg); }
+  &:hover {
+    background: var(--red-bg);
+  }
 }
 
 .datos {
@@ -117,22 +129,6 @@
   }
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  width: fit-content;
-
-  svg { width: 16px; height: 16px; }
-
-  &.activo { background: var(--green-bg); color: var(--green); }
-  &.baja { background: var(--red-bg); color: var(--red); }
-}
-
 .btn-pai {
   display: flex;
   align-items: center;
@@ -149,15 +145,23 @@
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { background: var(--purple-600); }
+  &:hover {
+    background: var(--purple-600);
+  }
 }
 
-.cargando, .error {
+.cargando,
+.error {
   text-align: center;
   padding: 2rem;
   color: var(--ink-soft);
 }
 
-.error { color: var(--red); }
+.error {
+  color: var(--red);
+}

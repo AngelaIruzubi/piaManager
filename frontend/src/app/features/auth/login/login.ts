@@ -9,10 +9,9 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
 })
 export class LoginComponent {
-
   form: FormGroup;
   error = '';
   cargando = false;
@@ -21,11 +20,11 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -45,10 +44,14 @@ export class LoginComponent {
         this.error = err.error?.mensaje || 'Error al iniciar sesión';
         this.cargando = false;
         this.cdr.detectChanges(); // sin Zone.js hay que avisar a Angular para que pinte el error
-      }
+      },
     });
   }
 
-  get emailControl() { return this.form.get('email'); }
-  get passwordControl() { return this.form.get('password'); }
+  get emailControl() {
+    return this.form.get('email');
+  }
+  get passwordControl() {
+    return this.form.get('password');
+  }
 }

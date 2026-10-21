@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
 import { Router, RouterLink } from '@angular/router';
-
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-lista-usuarios',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [EstadoActivo, CommonModule, RouterLink],
   templateUrl: './lista-usuarios.html',
-  styleUrl: './lista-usuarios.scss'
+  styleUrl: './lista-usuarios.scss',
 })
 export class ListaUsuarios implements OnInit {
-
   private usuarioService = inject(UsuarioService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
@@ -26,7 +25,7 @@ export class ListaUsuarios implements OnInit {
     this.usuarioService.getAll().subscribe({
       next: (data: Usuario[]) => {
         // El panel es de educadores: la coordinación no se gestiona desde aquí
-        this.usuarios = data.filter(u => u.rol === 'educador');
+        this.usuarios = data.filter((u) => u.rol === 'educador');
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -34,7 +33,7 @@ export class ListaUsuarios implements OnInit {
         this.error = 'Error al cargar los usuarios';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -44,14 +43,12 @@ export class ListaUsuarios implements OnInit {
 
     this.usuarioService.darDeBaja(id).subscribe({
       next: () => {
-        this.usuarios = this.usuarios.map(u =>
-          u.id === id ? { ...u, activo: false } : u
-        );
+        this.usuarios = this.usuarios.map((u) => (u.id === id ? { ...u, activo: false } : u));
         this.cdr.detectChanges();
       },
       error: (err: any) => {
         alert(err?.error?.mensaje || 'Error al dar de baja al usuario');
-      }
+      },
     });
   }
 

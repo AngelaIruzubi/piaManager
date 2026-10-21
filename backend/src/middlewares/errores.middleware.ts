@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { HttpError } from '../errors';
 
+// Limpia un texto que viene del usuario antes de escribirlo en el log: cambia los caracteres de control
+// (saltos de línea, tabuladores...) por espacios y lo recorta. Así nadie puede "inventarse" líneas falsas
+// en el log (log injection)
+export function paraLog(texto: string): string {
+  return texto.replace(/[\u0000-\u001f\u007f]/g, ' ').slice(0, 300);
+}
+
 // Rutas que no existen
 export const rutaNoEncontrada = (req: Request, res: Response) => {
   res.status(404).json({ mensaje: `Ruta no encontrada: ${req.method} ${req.originalUrl}` });
@@ -29,6 +36,6 @@ export const manejadorErrores = (err: any, req: Request, res: Response, _next: N
   }
 
   // Inesperados (base de datos caída, bugs...): se registran, pero al cliente no se le dan detalles
-  console.error(`❌ Error en ${req.method} ${req.originalUrl}:`, err);
+  console.error(`❌ Error en ${req.method} ${paraLog(req.originalUrl)}:`, err);
   res.status(500).json({ mensaje: 'Error interno del servidor' });
 };

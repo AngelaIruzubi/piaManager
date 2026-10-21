@@ -4,16 +4,16 @@ import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MediosObjetivo } from '../medios-objetivo/medios-objetivo';
+import { EstadoObjetivo } from '../../../shared/components/estado-objetivo/estado-objetivo';
 
 @Component({
   selector: 'app-objetivo-detalle',
   standalone: true,
-  imports: [CommonModule, MediosObjetivo],
+  imports: [EstadoObjetivo, CommonModule, MediosObjetivo],
   templateUrl: './objetivo-detalle.html',
-  styleUrl: './objetivo-detalle.scss'
+  styleUrl: './objetivo-detalle.scss',
 })
 export class ObjetivoDetalle implements OnInit {
-
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -44,7 +44,7 @@ export class ObjetivoDetalle implements OnInit {
         this.error = 'Error al cargar el objetivo';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -71,24 +71,16 @@ export class ObjetivoDetalle implements OnInit {
 
     if (!confirm(`¿Cambiar estado a "${siguiente}"?`)) return;
 
-    this.http.patch(`${this.apiUrl}/objetivos/${this.objetivoId}/estado`, { estado: siguiente }).subscribe({
-      next: () => {
-        this.objetivo.estado = siguiente;
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => {
-        alert(err.error?.mensaje || 'Error al cambiar estado');
-      }
-    });
-  }
-
-  etiquetaEstado(estado: string): string {
-    const etiquetas: any = {
-      pendiente: 'Pendiente',
-      en_proceso: 'En proceso',
-      conseguido: 'Conseguido',
-      no_trabajado: 'No trabajado'
-    };
-    return etiquetas[estado] || estado;
+    this.http
+      .patch(`${this.apiUrl}/objetivos/${this.objetivoId}/estado`, { estado: siguiente })
+      .subscribe({
+        next: () => {
+          this.objetivo.estado = siguiente;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          alert(err.error?.mensaje || 'Error al cambiar estado');
+        },
+      });
   }
 }

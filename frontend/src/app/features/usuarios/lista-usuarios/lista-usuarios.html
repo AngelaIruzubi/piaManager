@@ -1,8 +1,8 @@
 <div class="lista-container">
   <div class="cabecera">
-  <h2>Educadores</h2>
-  <button class="btn-nuevo" routerLink="/usuarios/nuevo">+ Nuevo educador</button>
-</div>
+    <h2>Educadores</h2>
+    <button class="btn-nuevo" routerLink="/usuarios/nuevo">+ Nuevo educador</button>
+  </div>
 
   <div *ngIf="cargando" class="cargando">Cargando...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
@@ -28,15 +28,10 @@
             </span>
           </td>
           <td>
-            <span class="badge" [class.activo]="usuario.activo" [class.baja]="!usuario.activo">
-              {{ usuario.activo ? 'Activo' : 'Baja' }}
-            </span>
+            <app-estado-activo [activo]="usuario.activo" />
           </td>
           <td>
-            <button
-              class="btn-baja"
-              *ngIf="usuario.activo"
-              (click)="darDeBaja(usuario.id, $event)">
+            <button class="btn-baja" *ngIf="usuario.activo" (click)="darDeBaja(usuario.id, $event)">
               Dar de baja
             </button>
           </td>

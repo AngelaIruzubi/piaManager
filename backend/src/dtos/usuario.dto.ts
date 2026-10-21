@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, IsIn, IsOptional } from 'class-validator';
 
-export const ROLES = ['educador', 'coordinador'];
+const ROLES = ['educador', 'coordinador'];
 
 export class CrearUsuarioDto {
   @IsString()

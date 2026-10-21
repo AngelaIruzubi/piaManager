@@ -11,10 +11,9 @@ import { Usuario } from '../../../shared/models/usuario.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-persona.html',
-  styleUrl: './form-persona.scss'
+  styleUrl: './form-persona.scss',
 })
 export class FormPersona implements OnInit {
-
   private fb = inject(FormBuilder);
   private personasService = inject(PersonasService);
   private usuarioService = inject(UsuarioService);
@@ -51,7 +50,7 @@ export class FormPersona implements OnInit {
         this.educadores = data as Usuario[];
         this.cdr.detectChanges();
       },
-      error: (_err: any) => {}
+      error: (_err: any) => {},
     });
 
     // Si es edición cargamos los datos
@@ -69,7 +68,7 @@ export class FormPersona implements OnInit {
           });
           this.cdr.detectChanges();
         },
-        error: (_err: any) => {}
+        error: (_err: any) => {},
       });
     }
   }
@@ -91,7 +90,7 @@ export class FormPersona implements OnInit {
           this.error = 'Error al actualizar la persona';
           this.cargando = false;
           this.cdr.detectChanges();
-        }
+        },
       });
     } else {
       this.personasService.crear(datos).subscribe({
@@ -102,7 +101,7 @@ export class FormPersona implements OnInit {
           this.error = 'Error al crear la persona';
           this.cargando = false;
           this.cdr.detectChanges();
-        }
+        },
       });
     }
   }

@@ -17,9 +17,14 @@
   padding: 0;
   margin-bottom: 1.75rem;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { color: var(--purple-900); }
+  &:hover {
+    color: var(--purple-900);
+  }
 }
 
 .cabecera-objetivo {
@@ -46,8 +51,16 @@
   margin-bottom: 24px;
   overflow: hidden;
 
-  svg { width: 76px; height: 76px; }
-  img { width: 100%; height: 100%; object-fit: contain; padding: 20px; }
+  svg {
+    width: 76px;
+    height: 76px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 20px;
+  }
 }
 
 .etiqueta-area {
@@ -65,23 +78,6 @@ h1 {
   margin: 0 0 20px;
   max-width: 520px;
   line-height: 1.3;
-}
-
-.estado-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 999px;
-  padding: 9px 18px;
-  font-size: 1rem;
-  font-weight: 700;
-
-  svg { width: 20px; height: 20px; }
-
-  &.estado-conseguido { background: var(--green-bg); color: var(--green); }
-  &.estado-en_proceso { background: var(--amber-bg); color: var(--amber); }
-  &.estado-pendiente { background: var(--gray-bg); color: var(--gray); }
-  &.estado-no_trabajado { background: var(--red-bg); color: var(--red); }
 }
 
 .pictogramas-lista {
@@ -124,9 +120,14 @@ h1 {
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 20px; height: 20px; }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
 .titulo-progreso {
@@ -228,9 +229,14 @@ h1 {
   cursor: pointer;
   margin-top: 12px;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { background: var(--purple-600); }
+  &:hover {
+    background: var(--purple-600);
+  }
 }
 
 .cargando {

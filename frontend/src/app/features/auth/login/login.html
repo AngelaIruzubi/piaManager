@@ -4,18 +4,17 @@
     <p>Centro de día — Panel de gestión</p>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
       <div class="campo">
-        <label>Email</label>
-        <input type="email" formControlName="email" />
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" formControlName="email" />
         <span class="error" *ngIf="emailControl?.invalid && emailControl?.touched">
           Email no válido
         </span>
       </div>
 
       <div class="campo">
-        <label>Contraseña</label>
-        <input type="password" formControlName="password" />
+        <label for="login-password">Contraseña</label>
+        <input id="login-password" type="password" formControlName="password" />
         <span class="error" *ngIf="passwordControl?.invalid && passwordControl?.touched">
           Mínimo 6 caracteres
         </span>
@@ -26,7 +25,6 @@
       <button type="submit" [disabled]="form.invalid || cargando">
         {{ cargando ? 'Entrando...' : 'Entrar' }}
       </button>
-
     </form>
   </div>
 </div>
