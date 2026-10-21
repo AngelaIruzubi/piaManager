@@ -1,0 +1,71 @@
+# Dependabot: vigila cada semana las dependencias y abre PRs para actualizarlas.
+# Cada PR pasa por el CI completo (tests, build, npm audit, Trivy, SonarQube, knip).
+#
+# Mensajes de commit con formato Conventional Commits, para el versionado automático:
+#   fix(deps)       → librerías de producción: es un arreglo de la app (versión de parche)
+#   chore(deps-dev) → librerías de desarrollo: no cambian la app (sin versión nueva)
+#   fix(docker)     → imágenes base de Docker: suelen traer parches de seguridad
+#   ci              → acciones de GitHub: solo cambian el proceso del CI
+
+version: 2
+updates:
+
+  - package-ecosystem: npm
+    directory: /backend
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    groups:
+      # Todas las actualizaciones compatibles (minor y patch) en un único PR por semana
+      backend-menores:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    groups:
+      frontend-menores:
+        update-types: [minor, patch]
+    ignore:
+      # Las versiones mayores de Angular se actualizan a mano con "ng update"
+      - dependency-name: "@angular/*"
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      raiz-menores:
+        update-types: [minor, patch]
+
+  # Imágenes base: node:24-alpine (backend) y nginx-unprivileged (frontend)
+  - package-ecosystem: docker
+    directories: [/backend, /frontend]
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: fix
+      include: scope
+
+  # Acciones del CI: checkout, setup-node, build-push-action, trivy-action, sonarqube-scan-action...
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    groups:
+      acciones:
+        patterns: ["*"]
