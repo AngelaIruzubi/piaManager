@@ -1,0 +1,14 @@
+# Saltos de línea: siempre LF (formato de Linux), también al trabajar en Windows.
+# Así coinciden el repositorio, el CI (Linux), Docker y Prettier, y desaparecen los avisos
+# "LF will be replaced by CRLF".
+* text=auto eol=lf
+
+# Archivos binarios: git no debe tocarlos
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
