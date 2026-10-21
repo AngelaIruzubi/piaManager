@@ -1,6 +1,6 @@
 # ---------- Etapa 1: build ----------
 # Compila Angular en modo producción (usa environment.ts, con apiUrl = '/api')
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 
 # Primero solo los package*.json: si no cambian, Docker reutiliza la capa de npm ci
