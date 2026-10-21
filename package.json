@@ -2,10 +2,13 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k -n back,front -c magenta,cyan \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
-    "dev:db": "docker compose up -d db && npm run dev"
+    "dev:db": "docker compose up -d db && npm run dev",
+    "release": "semantic-release"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
-    "knip": "^6.42.1"
+    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "knip": "^6.42.1",
+    "semantic-release": "^25.0.9"
   }
 }

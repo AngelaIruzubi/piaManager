@@ -231,3 +231,75 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ matrix.servicio }}
           cache-to: type=gha,mode=max,scope=${{ matrix.servicio }}
+
+  # Solo en main y si todo lo anterior va bien: semantic-release calcula la versión a partir de los
+  # commits (feat → minor, fix → patch), crea la etiqueta vX.Y.Z y la Release con la lista de cambios.
+  # Después "promociona" a esa versión las mismas imágenes que ya pasaron los tests y Trivy (sin reconstruirlas)
+  release:
+    name: Versión (semantic-release)
+    needs: [ backend, frontend, librerias, docker ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # Nunca dos versiones a la vez (por ejemplo, si se fusionan dos PRs seguidos)
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    permissions:
+      contents: write        # crear la etiqueta y la Release
+      issues: write
+      pull-requests: write
+      packages: write        # añadir la etiqueta de versión a las imágenes
+
+    steps:
+      # Todo el historial y las etiquetas: semantic-release busca la última versión y los commits desde entonces
+      - name: Checkout del código (historial completo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Calcular la versión y publicar la Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run release
+
+      # semantic-release deja la etiqueta en el commit si ha creado versión
+      - name: Comprobar si hay versión nueva
+        id: version
+        run: |
+          TAG=$(git tag --points-at HEAD | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if [ -n "$TAG" ]; then echo "Nueva versión: $TAG"; else echo "Sin versión nueva: solo cambios internos (chore, ci, refactor...)"; fi
+
+      - name: Iniciar sesión en GitHub Container Registry
+        if: steps.version.outputs.tag != ''
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Añade las etiquetas X.Y.Z y X.Y a la imagen sha-<commit> que publicó el job docker
+      - name: Promocionar las imágenes a la versión
+        if: steps.version.outputs.tag != ''
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          VERSION="${TAG#v}"
+          MENOR="${VERSION%.*}"
+          ORIGEN="sha-${GITHUB_SHA::7}"
+          for SERVICIO in backend frontend; do
+            IMAGEN="ghcr.io/$OWNER/pia-$SERVICIO"
+            docker buildx imagetools create -t "$IMAGEN:$VERSION" -t "$IMAGEN:$MENOR" "$IMAGEN:$ORIGEN"
+            echo "$IMAGEN:$ORIGEN → $VERSION y $MENOR"
+          done

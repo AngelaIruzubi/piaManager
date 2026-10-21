@@ -11,7 +11,10 @@
   },
 
   "workspaces": {
-    ".": {},
+    ".": {
+      // semantic-release lo carga por su nombre corto ("preset": "conventionalcommits" en .releaserc.json)
+      "ignoreDependencies": ["conventional-changelog-conventionalcommits"]
+    },
 
     "backend": {
       // Punto de entrada extra: las migraciones se cargan por patrón desde config/database.ts, no con
