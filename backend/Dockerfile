@@ -1,6 +1,6 @@
 # ---------- Etapa 1: build ----------
 # Instala todas las dependencias (también las de desarrollo) y compila TypeScript a JavaScript
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 
 # Primero solo los package*.json: si no cambian, Docker reutiliza la capa de npm ci (builds más rápidos)
@@ -14,7 +14,7 @@ RUN npm run build
 
 # ---------- Etapa 2: runtime ----------
 # Imagen final: solo dependencias de producción y el código compilado
-FROM node:24-alpine AS runtime
+FROM node:26-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
