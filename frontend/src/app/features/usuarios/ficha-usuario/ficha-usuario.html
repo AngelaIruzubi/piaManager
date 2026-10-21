@@ -1,4 +1,4 @@
-<div class="ficha-container">
+<div class="ficha-container pagina">
   <button class="btn-volver" (click)="volver()">
     <svg
       viewBox="0 0 24 24"
@@ -21,7 +21,7 @@
     <div class="cabecera-usuario">
       <div class="avatar">{{ usuario.nombre.charAt(0) }}{{ usuario.apellidos.charAt(0) }}</div>
       <div class="info-cabecera">
-        <h1 class="nombre">{{ usuario.nombre }} {{ usuario.apellidos }}</h1>
+        <h1 class="nombre titulo-pagina">{{ usuario.nombre }} {{ usuario.apellidos }}</h1>
         <app-estado-activo [activo]="usuario.activo" />
       </div>
     </div>
