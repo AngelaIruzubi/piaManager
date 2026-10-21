@@ -1,4 +1,4 @@
-<div class="detalle-container">
+<div class="detalle-container pagina">
   <button class="btn-volver" (click)="volver()">
     <svg
       viewBox="0 0 24 24"
@@ -43,7 +43,7 @@
       <span class="etiqueta-area"
         >{{ objetivo.area?.tipo | titlecase }} · Plazo {{ objetivo.plazo }}</span
       >
-      <h1>{{ objetivo.descripcion }}</h1>
+      <h1 class="titulo-pagina">{{ objetivo.descripcion }}</h1>
       <app-estado-objetivo [estado]="objetivo.estado" tamano="grande" />
     </div>
 

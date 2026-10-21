@@ -1,4 +1,4 @@
-<div class="pai-container">
+<div class="pai-container pagina">
   <div class="cabecera-acciones no-imprimir">
     <button class="btn-volver" (click)="volver()">
       <svg
@@ -57,7 +57,9 @@
     <div class="contexto">
       <div class="avatar">{{ iniciales(pai.persona?.nombre || '') }}</div>
       <div class="datos-contexto">
-        <span class="nombre">{{ pai.persona?.nombre }} {{ pai.persona?.apellidos }}</span>
+        <span class="nombre titulo-pagina"
+          >{{ pai.persona?.nombre }} {{ pai.persona?.apellidos }}</span
+        >
         <span class="subtitulo">Plan de Atención Individual · {{ pai.anio }}</span>
       </div>
       <div

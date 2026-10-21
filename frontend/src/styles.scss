@@ -47,3 +47,87 @@ a:hover {
 button {
   font-family: inherit;
 }
+
+// ---------- Formato común de las pantallas ----------
+// Todas las pantallas usan .pagina (centrada, mismos márgenes). Los formularios añaden
+// .pagina--estrecha: un formulario muy ancho es incómodo de rellenar
+.pagina {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.5rem 3rem 4rem;
+  box-sizing: border-box;
+}
+
+.pagina--estrecha {
+  max-width: 720px;
+}
+
+// Título principal de cada pantalla: el mismo tamaño en toda la app
+.titulo-pagina {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+// Cabecera de las pantallas de lista: título (y subtítulo) a la izquierda, acción a la derecha.
+// En pantallas estrechas el botón pasa debajo del título
+.cabecera-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px 24px;
+  margin-bottom: 2rem;
+
+  .titulo-pagina {
+    color: var(--purple-900);
+    margin: 0;
+  }
+}
+
+.subtitulo-pagina {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  margin: 6px 0 0;
+}
+
+// Botón principal de "crear" (nueva persona, nuevo educador, crear PAI): el mismo en toda la app
+.btn-nuevo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--purple-700);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 16px 26px;
+  min-height: 48px;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--purple-600);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--purple-600);
+    outline-offset: 3px;
+  }
+}
+
+// En pantallas estrechas (móvil), menos margen lateral
+@media (max-width: 700px) {
+  .pagina {
+    padding: 1.5rem 1rem 3rem;
+  }
+}

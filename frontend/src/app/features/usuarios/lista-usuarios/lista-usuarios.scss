@@ -1,19 +1,3 @@
-.lista-container {
-  padding: 2rem;
-}
-
-.cabecera {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-
-  h2 {
-    color: var(--purple-700);
-    margin: 0;
-  }
-}
-
 .cargando,
 .vacio {
   text-align: center;
@@ -53,7 +37,7 @@ table {
 .badge-rol {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   background: #e2e8f0;
   color: #333;
   text-transform: capitalize;
@@ -72,22 +56,9 @@ table {
   padding: 0.4rem 0.75rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 1rem;
 
   &:hover {
     background: #feb2b2;
-  }
-}
-
-.btn-nuevo {
-  background: var(--purple-700);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  &:hover {
-    background: var(--purple-600);
   }
 }
