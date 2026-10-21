@@ -23,9 +23,14 @@
   cursor: pointer;
   padding: 0;
 
-  svg { width: 24px; height: 24px; }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 
-  &:hover { color: var(--purple-900); }
+  &:hover {
+    color: var(--purple-900);
+  }
 }
 
 .btn-pdf {
@@ -42,9 +47,14 @@
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 18px; height: 18px; }
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
 .contexto {
@@ -78,8 +88,14 @@
   gap: 4px;
   flex-grow: 1;
 
-  .nombre { font-size: 1.5rem; font-weight: 700; }
-  .subtitulo { font-size: 1rem; color: var(--ink-soft); }
+  .nombre {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .subtitulo {
+    font-size: 1rem;
+    color: var(--ink-soft);
+  }
 }
 
 .observaciones-generales {
@@ -99,7 +115,9 @@
   color: var(--ink-soft);
   font-size: 1.1rem;
 
-  p { margin-bottom: 1.5rem; }
+  p {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .areas {
@@ -133,7 +151,10 @@
   flex-shrink: 0;
   color: var(--purple-700);
 
-  svg { width: 26px; height: 26px; }
+  svg {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 .area-titulo {
@@ -176,7 +197,9 @@
   margin-top: 20px;
   cursor: pointer;
 
-  &:first-of-type { margin-top: 0; }
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .objetivo-icono {
@@ -191,8 +214,16 @@
   color: var(--purple-700);
   overflow: hidden;
 
-  svg { width: 28px; height: 28px; }
-  img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+  }
 }
 
 .objetivo-info {
@@ -219,12 +250,28 @@
   font-weight: 700;
   width: fit-content;
 
-  svg { width: 17px; height: 17px; flex-shrink: 0; }
+  svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
 
-  &.estado-conseguido { background: var(--green-bg); color: var(--green); }
-  &.estado-en_proceso { background: var(--amber-bg); color: var(--amber); }
-  &.estado-pendiente { background: var(--gray-bg); color: var(--gray); }
-  &.estado-no_trabajado { background: var(--red-bg); color: var(--red); }
+  &.estado-conseguido {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+  &.estado-en_proceso {
+    background: var(--amber-bg);
+    color: var(--amber);
+  }
+  &.estado-pendiente {
+    background: var(--gray-bg);
+    color: var(--gray);
+  }
+  &.estado-no_trabajado {
+    background: var(--red-bg);
+    color: var(--red);
+  }
 }
 
 .acciones {
@@ -247,9 +294,14 @@
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 18px; height: 18px; }
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
 .pictogramas-lista {
@@ -285,9 +337,15 @@
   font-size: 1rem;
   font-weight: 700;
 
-  svg { width: 20px; height: 20px; }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 
-  &:hover { border-color: var(--purple-700); background: var(--purple-50); }
+  &:hover {
+    border-color: var(--purple-700);
+    background: var(--purple-50);
+  }
 }
 
 .sin-objetivos {
@@ -311,9 +369,14 @@
   cursor: pointer;
   margin: 0 auto;
 
-  svg { width: 22px; height: 22px; }
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 
-  &:hover { background: var(--purple-600); }
+  &:hover {
+    background: var(--purple-600);
+  }
 }
 
 .cargando {
@@ -340,7 +403,8 @@
     display: none !important;
   }
 
-  .contexto, .area-card {
+  .contexto,
+  .area-card {
     border: 1px solid #ccc;
     break-inside: avoid;
   }
@@ -358,7 +422,9 @@
     margin-bottom: 20px;
   }
 
-  .estado-pill, .badge, .badge-rol {
+  .estado-pill,
+  .badge,
+  .badge-rol {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }

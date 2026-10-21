@@ -5,7 +5,6 @@ import { ValorCatalogo } from '../../shared/models/pai.model';
 
 @Injectable({ providedIn: 'root' })
 export class CatalogoService {
-
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}

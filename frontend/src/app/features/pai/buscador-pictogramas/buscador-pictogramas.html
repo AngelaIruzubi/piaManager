@@ -1,5 +1,4 @@
 <div class="buscador-container">
-
   <button class="btn-volver" (click)="volver()">← Volver</button>
 
   <h2>Pictogramas ARASAAC</h2>
@@ -19,10 +18,13 @@
   <div class="buscador">
     <form [formGroup]="form" (ngSubmit)="buscar()">
       <div class="input-grupo">
-        <input type="text" formControlName="keyword"
-               aria-label="Palabra para buscar pictogramas"
-               placeholder="Ej: vestir, comer, comunicar..."
-               (keyup.enter)="buscar()" />
+        <input
+          type="text"
+          formControlName="keyword"
+          aria-label="Palabra para buscar pictogramas"
+          placeholder="Ej: vestir, comer, comunicar..."
+          (keyup.enter)="buscar()"
+        />
         <button type="submit" [disabled]="buscando">
           {{ buscando ? 'Buscando...' : 'Buscar' }}
         </button>
@@ -48,10 +50,12 @@
   <div class="seccion" *ngIf="resultados.length > 0">
     <h3>Resultados de búsqueda</h3>
     <div class="grid-pictogramas">
-      <div class="pictograma-card"
-           *ngFor="let p of resultados"
-           [class.ya-seleccionado]="estaSeleccionado(p.arasaac_id)"
-           (click)="seleccionar(p)">
+      <div
+        class="pictograma-card"
+        *ngFor="let p of resultados"
+        [class.ya-seleccionado]="estaSeleccionado(p.arasaac_id)"
+        (click)="seleccionar(p)"
+      >
         <img [src]="p.imagen_url" [alt]="p.keyword" />
         <span class="keyword">{{ p.keyword }}</span>
         <span class="check" *ngIf="estaSeleccionado(p.arasaac_id)">✅</span>
@@ -59,12 +63,9 @@
     </div>
   </div>
 
-  <div class="vacio" *ngIf="buscando">
-    Buscando pictogramas para este objetivo...
-  </div>
+  <div class="vacio" *ngIf="buscando">Buscando pictogramas para este objetivo...</div>
 
   <div class="vacio" *ngIf="!buscando && sugerenciaHecha && resultados.length === 0">
     No se encontraron pictogramas para este objetivo. Prueba a buscar otra palabra arriba.
   </div>
-
 </div>

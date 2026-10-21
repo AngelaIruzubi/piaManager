@@ -5,7 +5,17 @@
       <p class="subtitulo">Elige una persona para ver su plan de atención</p>
     </div>
     <button class="btn-nuevo" *ngIf="esCoordinador" routerLink="/personas/nueva">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </svg>
       Nuevo usuario
     </button>
   </div>
@@ -22,12 +32,46 @@
         <div class="datos">
           <span class="nombre">{{ nombreCompleto(persona) }}</span>
           <div class="educador">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4.5-6 7-6s6 2 7 6"/></svg>
-            Educador: {{ persona.profesional_referencia?.nombre }} {{ persona.profesional_referencia?.apellidos }}
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M5 20c1-4 4.5-6 7-6s6 2 7 6" />
+            </svg>
+            Educador: {{ persona.profesional_referencia?.nombre }}
+            {{ persona.profesional_referencia?.apellidos }}
           </div>
           <div class="badge" [class.activo]="persona.activo" [class.baja]="!persona.activo">
-            <svg *ngIf="persona.activo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
-            <svg *ngIf="!persona.activo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg>
+            <svg
+              *ngIf="persona.activo"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M8 12.5l2.5 2.5L16 9.5" />
+            </svg>
+            <svg
+              *ngIf="!persona.activo"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9 9l6 6" />
+              <path d="M15 9l-6 6" />
+            </svg>
             {{ persona.activo ? 'Activo' : 'Baja' }}
           </div>
         </div>

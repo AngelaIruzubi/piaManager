@@ -1,15 +1,17 @@
 <div class="form-container">
-
   <button class="btn-volver" (click)="volver()">← Volver</button>
 
   <h2>{{ esEdicion ? 'Editar objetivo' : 'Nuevo objetivo' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <div class="campo">
       <label for="objetivo-descripcion">Descripción *</label>
-      <textarea id="objetivo-descripcion" formControlName="descripcion" rows="3"
-        placeholder="Ej: Se viste sola con supervisión mínima"></textarea>
+      <textarea
+        id="objetivo-descripcion"
+        formControlName="descripcion"
+        rows="3"
+        placeholder="Ej: Se viste sola con supervisión mínima"
+      ></textarea>
     </div>
 
     <div class="fila">
@@ -37,9 +39,8 @@
     <div class="acciones">
       <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
       <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
-        {{ cargando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear objetivo') }}
+        {{ cargando ? 'Guardando...' : esEdicion ? 'Guardar cambios' : 'Crear objetivo' }}
       </button>
     </div>
-
   </form>
 </div>

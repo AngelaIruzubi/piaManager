@@ -9,10 +9,9 @@ import { Usuario } from '../../../shared/models/usuario.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './ficha-usuario.html',
-  styleUrl: './ficha-usuario.scss'
+  styleUrl: './ficha-usuario.scss',
 })
 export class FichaUsuario implements OnInit {
-
   private usuarioService = inject(UsuarioService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -35,7 +34,7 @@ export class FichaUsuario implements OnInit {
         this.error = 'Error al cargar el educador';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -57,7 +56,7 @@ export class FichaUsuario implements OnInit {
       },
       error: (err: any) => {
         alert(err?.error?.mensaje || 'Error al dar de baja al educador');
-      }
+      },
     });
   }
 }

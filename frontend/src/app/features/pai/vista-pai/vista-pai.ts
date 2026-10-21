@@ -4,16 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PaiService } from '../../../core/services/pai.service';
 import { Pai } from '../../../shared/models/pai.model';
 
-
 @Component({
   selector: 'app-vista-pai',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './vista-pai.html',
-  styleUrl: './vista-pai.scss'
+  styleUrl: './vista-pai.scss',
 })
 export class VistaPai implements OnInit {
-
   private paiService = inject(PaiService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -31,7 +29,7 @@ export class VistaPai implements OnInit {
       next: (data: any) => {
         // Cogemos el PAI activo o el más reciente
         const pais = data as Pai[];
-        this.pai = pais.find(p => p.estado === 'activo') || pais[0] || null;
+        this.pai = pais.find((p) => p.estado === 'activo') || pais[0] || null;
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -39,7 +37,7 @@ export class VistaPai implements OnInit {
         this.error = 'Error al cargar el PAI';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

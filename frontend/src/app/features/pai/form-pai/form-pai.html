@@ -1,11 +1,9 @@
 <div class="form-container">
-
   <button class="btn-volver" (click)="volver()">← Volver</button>
 
   <h2>Nuevo PAI</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <div class="fila">
       <div class="campo">
         <label for="pai-anio">Año *</label>
@@ -24,7 +22,11 @@
 
     <div class="campo">
       <label for="pai-observaciones">Observaciones generales</label>
-      <textarea id="pai-observaciones" formControlName="observaciones_generales" rows="4"></textarea>
+      <textarea
+        id="pai-observaciones"
+        formControlName="observaciones_generales"
+        rows="4"
+      ></textarea>
     </div>
 
     <div class="error" *ngIf="error">{{ error }}</div>
@@ -35,6 +37,5 @@
         {{ cargando ? 'Creando...' : 'Crear PAI' }}
       </button>
     </div>
-
   </form>
 </div>

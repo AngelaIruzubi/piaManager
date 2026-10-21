@@ -1,11 +1,9 @@
 <div class="form-container">
-
   <button class="btn-volver" (click)="volver()">← Volver</button>
 
   <h2>{{ esEdicion ? 'Editar educador' : 'Nuevo usuario' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <div class="fila">
       <div class="campo">
         <label for="usuario-nombre">Nombre *</label>
@@ -33,9 +31,8 @@
     <div class="acciones">
       <button type="button" class="btn-cancelar" (click)="volver()">Cancelar</button>
       <button type="submit" class="btn-guardar" [disabled]="form.invalid || cargando">
-        {{ cargando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear usuario') }}
+        {{ cargando ? 'Guardando...' : esEdicion ? 'Guardar cambios' : 'Crear usuario' }}
       </button>
     </div>
-
   </form>
 </div>

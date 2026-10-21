@@ -5,18 +5,17 @@ import { Persona } from '../../shared/models/persona.model';
 
 @Injectable({ providedIn: 'root' })
 export class PersonasService {
-
   private apiUrl = `${environment.apiUrl}/personas`;
 
   constructor(private http: HttpClient) {}
 
- getAll() {
-  return this.http.get<Persona[]>(this.apiUrl);
-}
+  getAll() {
+    return this.http.get<Persona[]>(this.apiUrl);
+  }
 
-getById(id: number) {
-  return this.http.get<Persona>(`${this.apiUrl}/${id}`);
-}
+  getById(id: number) {
+    return this.http.get<Persona>(`${this.apiUrl}/${id}`);
+  }
 
   crear(data: Partial<Persona>) {
     return this.http.post<Persona>(this.apiUrl, data);

@@ -11,10 +11,9 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './buscador-pictogramas.html',
-  styleUrl: './buscador-pictogramas.scss'
+  styleUrl: './buscador-pictogramas.scss',
 })
 export class BuscadorPictogramas implements OnInit {
-
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
@@ -37,7 +36,7 @@ export class BuscadorPictogramas implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      keyword: ['']
+      keyword: [''],
     });
   }
 
@@ -49,7 +48,7 @@ export class BuscadorPictogramas implements OnInit {
       next: (data: any) => {
         this.objetivo = data;
         this.cdr.detectChanges();
-      }
+      },
     });
 
     // Cargar pictogramas ya seleccionados
@@ -63,20 +62,22 @@ export class BuscadorPictogramas implements OnInit {
     this.buscando = true;
     this.error = '';
 
-    this.http.get<any>(`${this.apiUrl}/objetivos/${this.objetivoId}/pictogramas/sugerencias`).subscribe({
-      next: (data: any) => {
-        this.resultados = data.resultados;
-        this.palabrasProbadas = data.palabras_probadas;
-        this.sugerenciaHecha = true;
-        this.buscando = false;
-        this.cdr.detectChanges();
-      },
-      error: (_err: any) => {
-        this.sugerenciaHecha = true;
-        this.buscando = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.http
+      .get<any>(`${this.apiUrl}/objetivos/${this.objetivoId}/pictogramas/sugerencias`)
+      .subscribe({
+        next: (data: any) => {
+          this.resultados = data.resultados;
+          this.palabrasProbadas = data.palabras_probadas;
+          this.sugerenciaHecha = true;
+          this.buscando = false;
+          this.cdr.detectChanges();
+        },
+        error: (_err: any) => {
+          this.sugerenciaHecha = true;
+          this.buscando = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   cargarSeleccionados() {
@@ -84,7 +85,7 @@ export class BuscadorPictogramas implements OnInit {
       next: (data: any) => {
         this.seleccionados = data;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -96,51 +97,55 @@ export class BuscadorPictogramas implements OnInit {
     this.resultados = [];
     this.error = '';
 
-    this.http.get<any[]>(`${this.apiUrl}/pictogramas/buscar?keyword=${encodeURIComponent(keyword)}`).subscribe({
-      next: (data: any) => {
-        this.resultados = data;
-        this.buscando = false;
-        this.cdr.detectChanges();
-      },
-      error: (_err: any) => {
-        this.error = 'Error al buscar pictogramas';
-        this.buscando = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.http
+      .get<any[]>(`${this.apiUrl}/pictogramas/buscar?keyword=${encodeURIComponent(keyword)}`)
+      .subscribe({
+        next: (data: any) => {
+          this.resultados = data;
+          this.buscando = false;
+          this.cdr.detectChanges();
+        },
+        error: (_err: any) => {
+          this.error = 'Error al buscar pictogramas';
+          this.buscando = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   estaSeleccionado(arasaac_id: number): boolean {
-    return this.seleccionados.some(s => s.arasaac_id === arasaac_id);
+    return this.seleccionados.some((s) => s.arasaac_id === arasaac_id);
   }
 
   seleccionar(pictograma: any) {
     if (this.estaSeleccionado(pictograma.arasaac_id)) return;
 
-    this.http.post(`${this.apiUrl}/objetivos/${this.objetivoId}/pictogramas`, {
-      arasaac_id: pictograma.arasaac_id,
-      keyword: pictograma.keyword
-    }).subscribe({
-      next: () => {
-        this.cargarSeleccionados();
-      },
-      error: (err: any) => {
-        this.error = err.error?.mensaje || 'Error al guardar el pictograma';
-        this.cdr.detectChanges();
-      }
-    });
+    this.http
+      .post(`${this.apiUrl}/objetivos/${this.objetivoId}/pictogramas`, {
+        arasaac_id: pictograma.arasaac_id,
+        keyword: pictograma.keyword,
+      })
+      .subscribe({
+        next: () => {
+          this.cargarSeleccionados();
+        },
+        error: (err: any) => {
+          this.error = err.error?.mensaje || 'Error al guardar el pictograma';
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   eliminarSeleccionado(id: number) {
     this.http.delete(`${this.apiUrl}/pictogramas/${id}`).subscribe({
       next: () => {
-        this.seleccionados = this.seleccionados.filter(s => s.id !== id);
+        this.seleccionados = this.seleccionados.filter((s) => s.id !== id);
         this.cdr.detectChanges();
       },
       error: (_err: any) => {
         this.error = 'Error al eliminar el pictograma';
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

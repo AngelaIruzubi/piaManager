@@ -9,10 +9,9 @@ import { PaiService } from '../../../core/services/pai.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-pai.html',
-  styleUrl: './form-pai.scss'
+  styleUrl: './form-pai.scss',
 })
 export class FormPai implements OnInit {
-
   private fb = inject(FormBuilder);
   private paiService = inject(PaiService);
   private route = inject(ActivatedRoute);
@@ -51,7 +50,7 @@ export class FormPai implements OnInit {
         this.error = err.error?.mensaje || 'Error al crear el PAI';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

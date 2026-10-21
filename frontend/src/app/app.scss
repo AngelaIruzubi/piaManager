@@ -100,7 +100,8 @@
 }
 
 @media print {
-  .navbar, .sidebar {
+  .navbar,
+  .sidebar {
     display: none !important;
   }
 

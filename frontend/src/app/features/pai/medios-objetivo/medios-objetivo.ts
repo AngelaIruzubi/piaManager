@@ -18,10 +18,9 @@ const ESTILO_TIPO: Record<string, string> = {
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './medios-objetivo.html',
-  styleUrl: './medios-objetivo.scss'
+  styleUrl: './medios-objetivo.scss',
 })
 export class MediosObjetivo implements OnInit {
-
   private medioService = inject(MedioService);
   private catalogoService = inject(CatalogoService);
   private fb = inject(FormBuilder);
@@ -49,13 +48,13 @@ export class MediosObjetivo implements OnInit {
   ngOnInit() {
     this.medios.set(this.mediosIniciales());
     this.catalogoService.getByTipo('TIPO_MEDIO').subscribe({
-      next: tipos => this.tipos.set(tipos),
+      next: (tipos) => this.tipos.set(tipos),
       error: () => this.error.set('No se han podido cargar los tipos de medio'),
     });
   }
 
   etiquetaTipo(codigo: string): string {
-    return this.tipos().find(t => t.codigo === codigo)?.descripcion ?? codigo;
+    return this.tipos().find((t) => t.codigo === codigo)?.descripcion ?? codigo;
   }
 
   claseTipo(codigo: string): string {
@@ -63,12 +62,20 @@ export class MediosObjetivo implements OnInit {
   }
 
   abrirNuevo() {
-    this.form.reset({ tipo: this.tipos()[0]?.codigo ?? 'material', descripcion: '', responsable: '' });
+    this.form.reset({
+      tipo: this.tipos()[0]?.codigo ?? 'material',
+      descripcion: '',
+      responsable: '',
+    });
     this.abrirFormulario(null);
   }
 
   editar(medio: Medio) {
-    this.form.reset({ tipo: medio.tipo, descripcion: medio.descripcion, responsable: medio.responsable ?? '' });
+    this.form.reset({
+      tipo: medio.tipo,
+      descripcion: medio.descripcion,
+      responsable: medio.responsable ?? '',
+    });
     this.abrirFormulario(medio.id);
   }
 
@@ -95,17 +102,17 @@ export class MediosObjetivo implements OnInit {
 
     this.guardando.set(true);
     peticion.subscribe({
-      next: guardado => {
-        this.medios.update(lista => id
-          ? lista.map(m => m.id === id ? guardado : m)
-          : [...lista, guardado]);
+      next: (guardado) => {
+        this.medios.update((lista) =>
+          id ? lista.map((m) => (m.id === id ? guardado : m)) : [...lista, guardado],
+        );
         this.guardando.set(false);
         this.cerrar();
       },
-      error: err => {
+      error: (err) => {
         this.error.set(err.error?.mensaje || 'No se ha podido guardar el medio');
         this.guardando.set(false);
-      }
+      },
     });
   }
 
@@ -120,13 +127,13 @@ export class MediosObjetivo implements OnInit {
   borrar(id: number) {
     this.medioService.eliminar(id).subscribe({
       next: () => {
-        this.medios.update(lista => lista.filter(m => m.id !== id));
+        this.medios.update((lista) => lista.filter((m) => m.id !== id));
         this.confirmandoId.set(null);
       },
-      error: err => {
+      error: (err) => {
         this.error.set(err.error?.mensaje || 'No se ha podido quitar el medio');
         this.confirmandoId.set(null);
-      }
+      },
     });
   }
 

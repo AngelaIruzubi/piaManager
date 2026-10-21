@@ -10,10 +10,9 @@ import { MediosObjetivo } from '../medios-objetivo/medios-objetivo';
   standalone: true,
   imports: [CommonModule, MediosObjetivo],
   templateUrl: './objetivo-detalle.html',
-  styleUrl: './objetivo-detalle.scss'
+  styleUrl: './objetivo-detalle.scss',
 })
 export class ObjetivoDetalle implements OnInit {
-
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -44,7 +43,7 @@ export class ObjetivoDetalle implements OnInit {
         this.error = 'Error al cargar el objetivo';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -71,15 +70,17 @@ export class ObjetivoDetalle implements OnInit {
 
     if (!confirm(`¿Cambiar estado a "${siguiente}"?`)) return;
 
-    this.http.patch(`${this.apiUrl}/objetivos/${this.objetivoId}/estado`, { estado: siguiente }).subscribe({
-      next: () => {
-        this.objetivo.estado = siguiente;
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => {
-        alert(err.error?.mensaje || 'Error al cambiar estado');
-      }
-    });
+    this.http
+      .patch(`${this.apiUrl}/objetivos/${this.objetivoId}/estado`, { estado: siguiente })
+      .subscribe({
+        next: () => {
+          this.objetivo.estado = siguiente;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          alert(err.error?.mensaje || 'Error al cambiar estado');
+        },
+      });
   }
 
   etiquetaEstado(estado: string): string {
@@ -87,7 +88,7 @@ export class ObjetivoDetalle implements OnInit {
       pendiente: 'Pendiente',
       en_proceso: 'En proceso',
       conseguido: 'Conseguido',
-      no_trabajado: 'No trabajado'
+      no_trabajado: 'No trabajado',
     };
     return etiquetas[estado] || estado;
   }

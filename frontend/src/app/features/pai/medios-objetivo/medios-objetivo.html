@@ -16,22 +16,75 @@
             <span class="icono" [class]="claseTipo(medio.tipo)">
               @switch (medio.tipo) {
                 @case ('persona_apoyo') {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c.7-3.2 3-5 6-5s5.3 1.8 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 15c2.6.2 4.4 1.8 5 5"/></svg>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="9" cy="8" r="3" />
+                    <path d="M3 20c.7-3.2 3-5 6-5s5.3 1.8 6 5" />
+                    <circle cx="17" cy="9" r="2.5" />
+                    <path d="M16 15c2.6.2 4.4 1.8 5 5" />
+                  </svg>
                 }
                 @case ('tecnica') {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 18h6" />
+                    <path d="M10 21h4" />
+                    <path
+                      d="M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"
+                    />
+                  </svg>
                 }
                 @case ('adaptacion') {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 11l9-7 9 7" />
+                    <path d="M5 10v10h14V10" />
+                    <path d="M10 20v-6h4v6" />
+                  </svg>
                 }
                 @default {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+                    <path d="M3 8v8l9 5 9-5V8" />
+                    <path d="M12 13v8" />
+                  </svg>
                 }
               }
             </span>
 
             <div class="texto">
-              <span class="etiqueta" [class]="claseTipo(medio.tipo)">{{ etiquetaTipo(medio.tipo) }}</span>
+              <span class="etiqueta" [class]="claseTipo(medio.tipo)">{{
+                etiquetaTipo(medio.tipo)
+              }}</span>
               <p class="descripcion">{{ medio.descripcion }}</p>
               @if (medio.responsable) {
                 <p class="responsable"><strong>Responsable:</strong> {{ medio.responsable }}</p>
@@ -39,11 +92,48 @@
             </div>
 
             <div class="acciones">
-              <button type="button" class="btn-icono" aria-label="Editar este medio" title="Editar" (click)="editar(medio)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <button
+                type="button"
+                class="btn-icono"
+                aria-label="Editar este medio"
+                title="Editar"
+                (click)="editar(medio)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
               </button>
-              <button type="button" class="btn-icono peligro" aria-label="Quitar este medio" title="Quitar" (click)="pedirBorrar(medio.id)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>
+              <button
+                type="button"
+                class="btn-icono peligro"
+                aria-label="Quitar este medio"
+                title="Quitar"
+                (click)="pedirBorrar(medio.id)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 7h16" />
+                  <path d="M10 11v6" />
+                  <path d="M14 11v6" />
+                  <path d="M6 7l1 13h10l1-13" />
+                  <path d="M9 7V4h6v3" />
+                </svg>
               </button>
             </div>
           </div>
@@ -51,8 +141,12 @@
           @if (confirmandoId() === medio.id) {
             <div class="confirmar" role="alert">
               <span>¿Quitar este medio del objetivo?</span>
-              <button type="button" class="btn-secundario" (click)="cancelarBorrar()">Cancelar</button>
-              <button type="button" class="btn-peligro" (click)="borrar(medio.id)">Sí, quitar</button>
+              <button type="button" class="btn-secundario" (click)="cancelarBorrar()">
+                Cancelar
+              </button>
+              <button type="button" class="btn-peligro" (click)="borrar(medio.id)">
+                Sí, quitar
+              </button>
             </div>
           }
         </li>
@@ -63,7 +157,13 @@
   }
 
   @if (formAbierto()) {
-    <form class="formulario" [formGroup]="form" (ngSubmit)="guardar()" aria-labelledby="titulo-form" novalidate>
+    <form
+      class="formulario"
+      [formGroup]="form"
+      (ngSubmit)="guardar()"
+      aria-labelledby="titulo-form"
+      novalidate
+    >
       <h3 id="titulo-form">{{ editandoId() ? 'Editar medio' : 'Nuevo medio' }}</h3>
 
       <div class="campo">
@@ -78,20 +178,31 @@
       <div class="campo">
         <label for="medio-descripcion">Descripción <span class="nota">(obligatoria)</span></label>
         @let descripcionVacia = intentado() && !form.controls.descripcion.value.trim();
-        <textarea id="medio-descripcion" rows="3" formControlName="descripcion"
+        <textarea
+          id="medio-descripcion"
+          rows="3"
+          formControlName="descripcion"
           [class.invalido]="descripcionVacia"
           [attr.aria-invalid]="descripcionVacia"
           [attr.aria-describedby]="descripcionVacia ? 'error-descripcion' : null"
-          placeholder="Por ejemplo: tablero con la secuencia de pasos en pictogramas"></textarea>
+          placeholder="Por ejemplo: tablero con la secuencia de pasos en pictogramas"
+        ></textarea>
         @if (descripcionVacia) {
-          <span id="error-descripcion" class="error-campo" role="alert">Escribe una descripción para el medio.</span>
+          <span id="error-descripcion" class="error-campo" role="alert"
+            >Escribe una descripción para el medio.</span
+          >
         }
       </div>
 
       <div class="campo">
         <label for="medio-responsable">Responsable <span class="nota">(opcional)</span></label>
-        <input id="medio-responsable" type="text" formControlName="responsable" maxlength="200"
-          placeholder="Quién se encarga de este apoyo" />
+        <input
+          id="medio-responsable"
+          type="text"
+          formControlName="responsable"
+          maxlength="200"
+          placeholder="Quién se encarga de este apoyo"
+        />
       </div>
 
       @if (error()) {
@@ -107,7 +218,18 @@
     </form>
   } @else {
     <button type="button" class="btn-anadir" (click)="abrirNuevo()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </svg>
       Añadir medio
     </button>
   }

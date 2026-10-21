@@ -6,17 +6,14 @@ import { Persona } from '../../../shared/models/persona.model';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
-
-
 @Component({
   selector: 'app-lista-personas',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './lista-personas.html',
-  styleUrl: './lista-personas.scss'
+  styleUrl: './lista-personas.scss',
 })
 export class ListaPersonas implements OnInit {
-
   private personasService = inject(PersonasService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -39,7 +36,7 @@ export class ListaPersonas implements OnInit {
         this.error = 'Error al cargar las personas';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

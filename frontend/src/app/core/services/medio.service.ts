@@ -7,7 +7,6 @@ export type DatosMedio = Pick<Medio, 'tipo' | 'descripcion' | 'responsable'>;
 
 @Injectable({ providedIn: 'root' })
 export class MedioService {
-
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}

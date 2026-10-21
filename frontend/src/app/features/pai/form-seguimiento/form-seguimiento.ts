@@ -11,10 +11,9 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-seguimiento.html',
-  styleUrl: './form-seguimiento.scss'
+  styleUrl: './form-seguimiento.scss',
 })
 export class FormSeguimiento implements OnInit {
-
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -46,7 +45,7 @@ export class FormSeguimiento implements OnInit {
         this.objetivo = data;
         this.cdr.detectChanges();
       },
-      error: (_err: any) => {}
+      error: (_err: any) => {},
     });
   }
 
@@ -56,32 +55,31 @@ export class FormSeguimiento implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    this.http.post(
-      `${this.apiUrl}/objetivos/${this.objetivoId}/seguimientos`,
-      this.form.value
-    ).subscribe({
-      next: () => {
-        this.volver();
-      },
-      error: (err: any) => {
-        this.error = err.error?.mensaje || 'Error al guardar la observación';
-        this.cargando = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.http
+      .post(`${this.apiUrl}/objetivos/${this.objetivoId}/seguimientos`, this.form.value)
+      .subscribe({
+        next: () => {
+          this.volver();
+        },
+        error: (err: any) => {
+          this.error = err.error?.mensaje || 'Error al guardar la observación';
+          this.cargando = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   volver() {
     this.location.back();
   }
-  
+
   getColorEstado(estado: string): string {
-  const colores: any = {
-    pendiente: '#E2E8F0',
-    en_proceso: '#BEE3F8',
-    conseguido: '#C6F6D5',
-    no_trabajado: '#FED7D7'
-  };
-  return colores[estado] || '#E2E8F0';
-}
+    const colores: any = {
+      pendiente: '#E2E8F0',
+      en_proceso: '#BEE3F8',
+      conseguido: '#C6F6D5',
+      no_trabajado: '#FED7D7',
+    };
+    return colores[estado] || '#E2E8F0';
+  }
 }

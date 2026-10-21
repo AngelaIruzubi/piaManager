@@ -2,10 +2,22 @@
 
 // Colores por tipo de medio: se distinguen también por claridad, no solo por tono
 $tipos: (
-  material:   (#E2ECFA, #1D4A85),
-  persona:    (#FCE9D6, #7E420B),
-  tecnica:    (#EEE5FA, #55287F),
-  adaptacion: (#DAF1EC, #17564D),
+  material: (
+    #e2ecfa,
+    #1d4a85,
+  ),
+  persona: (
+    #fce9d6,
+    #7e420b,
+  ),
+  tecnica: (
+    #eee5fa,
+    #55287f,
+  ),
+  adaptacion: (
+    #daf1ec,
+    #17564d,
+  ),
 );
 
 @each $nombre, $colores in $tipos {
@@ -75,7 +87,10 @@ $tipos: (
   align-items: center;
   justify-content: center;
 
-  svg { width: 28px; height: 28px; }
+  svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .texto {
@@ -106,7 +121,9 @@ $tipos: (
   margin: 0;
   color: var(--ink-soft);
 
-  strong { color: var(--ink); }
+  strong {
+    color: var(--ink);
+  }
 }
 
 .acciones {
@@ -127,15 +144,22 @@ $tipos: (
   justify-content: center;
   cursor: pointer;
 
-  svg { width: 22px; height: 22px; }
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 
   &.peligro {
     border-color: var(--red-bg);
     color: var(--red);
 
-    &:hover { background: var(--red-bg); }
+    &:hover {
+      background: var(--red-bg);
+    }
   }
 }
 
@@ -184,7 +208,9 @@ $tipos: (
   flex-direction: column;
   gap: 8px;
 
-  label { font-weight: 700; }
+  label {
+    font-weight: 700;
+  }
 
   .nota {
     font-weight: 400;
@@ -205,14 +231,18 @@ $tipos: (
   }
 
   select,
-  input { min-height: 48px; }
+  input {
+    min-height: 48px;
+  }
 
   textarea {
     line-height: 1.5;
     resize: vertical;
   }
 
-  .invalido { border-color: var(--red); }
+  .invalido {
+    border-color: var(--red);
+  }
 }
 
 .error-campo {
@@ -252,7 +282,9 @@ $tipos: (
   background: var(--white);
   color: var(--purple-900);
 
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
 .btn-guardar {
@@ -261,8 +293,13 @@ $tipos: (
   background: var(--purple-700);
   color: white;
 
-  &:hover:not(:disabled) { background: var(--purple-600); }
-  &:disabled { opacity: 0.7; cursor: wait; }
+  &:hover:not(:disabled) {
+    background: var(--purple-600);
+  }
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
 }
 
 .btn-peligro {
@@ -289,9 +326,14 @@ $tipos: (
   font-weight: 700;
   cursor: pointer;
 
-  svg { width: 22px; height: 22px; }
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 
-  &:hover { background: var(--purple-100); }
+  &:hover {
+    background: var(--purple-100);
+  }
 }
 
 button:focus-visible,

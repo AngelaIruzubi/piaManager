@@ -5,7 +5,6 @@ import { Usuario } from '../../shared/models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
-
   private apiUrl = `${environment.apiUrl}/usuarios`;
 
   constructor(private http: HttpClient) {}
@@ -15,7 +14,9 @@ export class UsuarioService {
   }
 
   getEducadores() {
-    return this.http.get<Pick<Usuario, 'id' | 'nombre' | 'apellidos'>[]>(`${this.apiUrl}/educadores`);
+    return this.http.get<Pick<Usuario, 'id' | 'nombre' | 'apellidos'>[]>(
+      `${this.apiUrl}/educadores`,
+    );
   }
 
   getById(id: number) {

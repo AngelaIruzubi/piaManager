@@ -5,17 +5,14 @@ import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
 import { AuthService } from '../../../core/services/auth.service';
 
-
-
 @Component({
   selector: 'app-ficha-persona',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './ficha-persona.html',
-  styleUrl: './ficha-persona.scss'
+  styleUrl: './ficha-persona.scss',
 })
 export class FichaPersona implements OnInit {
-
   private personasService = inject(PersonasService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -41,7 +38,7 @@ export class FichaPersona implements OnInit {
         this.error = 'Error al cargar la persona';
         this.cargando = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -59,7 +56,7 @@ export class FichaPersona implements OnInit {
     this.router.navigate(['/personas']);
   }
   editar() {
-  this.router.navigate(['/personas', this.persona?.id, 'editar']);
+    this.router.navigate(['/personas', this.persona?.id, 'editar']);
   }
   darDeBaja() {
     if (!confirm('¿Estás segura de que quieres dar de baja a esta persona?')) return;
@@ -71,7 +68,7 @@ export class FichaPersona implements OnInit {
       },
       error: (_err: any) => {
         alert('Error al dar de baja a la persona');
-      }
+      },
     });
   }
 }

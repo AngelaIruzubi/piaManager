@@ -6,7 +6,6 @@ import { LoginResponse } from '../../shared/models/usuario.model';
 
 @Injectable({ providedIn: 'root' }) //Servicio de Angular, clase reutilizable con lógica
 export class AuthService {
-
   private apiUrl = environment.apiUrl;
   private tokenKey = 'pia_token';
 
@@ -22,12 +21,14 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { email, password }) //llama al backend para autenticar al usuario y obtener el token y el rol. Devuelve un observable que emite la respuesta del backend. El tipo de la respuesta es LoginResponse, que contiene el token y el rol del usuario.
-      .pipe( // funciona encadenando operadores
-        tap(response => {
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/auth/login`, { email, password }) //llama al backend para autenticar al usuario y obtener el token y el rol. Devuelve un observable que emite la respuesta del backend. El tipo de la respuesta es LoginResponse, que contiene el token y el rol del usuario.
+      .pipe(
+        // funciona encadenando operadores
+        tap((response) => {
           localStorage.setItem(this.tokenKey, response.token);
           this.usuarioActual.next(response); //Modifica el valor de la variable reactiva usuarioActual con los datos del usuario autenticado. Esto permite que otros componentes que estén suscritos a usuario$ reciban la actualización.
-        })
+        }),
       );
   }
 
@@ -54,6 +55,11 @@ export class AuthService {
 
   private decodificarToken(token: string): LoginResponse {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return { token, rol: payload.rol, nombre: payload.nombre ?? '', apellidos: payload.apellidos ?? '' };
+    return {
+      token,
+      rol: payload.rol,
+      nombre: payload.nombre ?? '',
+      apellidos: payload.apellidos ?? '',
+    };
   }
 }
