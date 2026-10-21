@@ -260,17 +260,9 @@
     background: var(--green-bg);
     color: var(--green);
   }
-  &.estado-en_proceso {
-    background: var(--amber-bg);
-    color: var(--amber);
-  }
   &.estado-pendiente {
     background: var(--gray-bg);
     color: var(--gray);
-  }
-  &.estado-no_trabajado {
-    background: var(--red-bg);
-    color: var(--red);
   }
 }
 

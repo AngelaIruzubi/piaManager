@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
 import { Router, RouterLink } from '@angular/router';
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-lista-usuarios',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [EstadoActivo, CommonModule, RouterLink],
   templateUrl: './lista-usuarios.html',
   styleUrl: './lista-usuarios.scss',
 })

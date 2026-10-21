@@ -22,34 +22,7 @@
       <div class="avatar">{{ usuario.nombre.charAt(0) }}{{ usuario.apellidos.charAt(0) }}</div>
       <div class="info-cabecera">
         <h1 class="nombre">{{ usuario.nombre }} {{ usuario.apellidos }}</h1>
-        <div class="badge" [class.activo]="usuario.activo" [class.baja]="!usuario.activo">
-          <svg
-            *ngIf="usuario.activo"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="9" />
-            <path d="M8 12.5l2.5 2.5L16 9.5" />
-          </svg>
-          <svg
-            *ngIf="!usuario.activo"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="9" />
-            <path d="M9 9l6 6" />
-            <path d="M15 9l-6 6" />
-          </svg>
-          {{ usuario.activo ? 'Activo' : 'Baja' }}
-        </div>
+        <app-estado-activo [activo]="usuario.activo" />
       </div>
     </div>
 

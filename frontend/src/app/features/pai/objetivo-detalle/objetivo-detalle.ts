@@ -4,11 +4,12 @@ import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MediosObjetivo } from '../medios-objetivo/medios-objetivo';
+import { EstadoObjetivo } from '../../../shared/components/estado-objetivo/estado-objetivo';
 
 @Component({
   selector: 'app-objetivo-detalle',
   standalone: true,
-  imports: [CommonModule, MediosObjetivo],
+  imports: [EstadoObjetivo, CommonModule, MediosObjetivo],
   templateUrl: './objetivo-detalle.html',
   styleUrl: './objetivo-detalle.scss',
 })
@@ -81,15 +82,5 @@ export class ObjetivoDetalle implements OnInit {
           alert(err.error?.mensaje || 'Error al cambiar estado');
         },
       });
-  }
-
-  etiquetaEstado(estado: string): string {
-    const etiquetas: any = {
-      pendiente: 'Pendiente',
-      en_proceso: 'En proceso',
-      conseguido: 'Conseguido',
-      no_trabajado: 'No trabajado',
-    };
-    return etiquetas[estado] || estado;
   }
 }

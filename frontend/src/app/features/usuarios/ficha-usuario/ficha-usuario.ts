@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Usuario } from '../../../shared/models/usuario.model';
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-ficha-usuario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [EstadoActivo, CommonModule],
   templateUrl: './ficha-usuario.html',
   styleUrl: './ficha-usuario.scss',
 })

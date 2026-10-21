@@ -128,31 +128,6 @@
   }
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  width: fit-content;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  &.activo {
-    background: var(--green-bg);
-    color: var(--green);
-  }
-  &.baja {
-    background: var(--red-bg);
-    color: var(--red);
-  }
-}
-
 .badge-rol {
   display: inline-block;
   background: #edf2f7;

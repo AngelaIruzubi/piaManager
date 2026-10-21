@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaiService } from '../../../core/services/pai.service';
 import { Pai } from '../../../shared/models/pai.model';
+import { EstadoObjetivo } from '../../../shared/components/estado-objetivo/estado-objetivo';
 
 @Component({
   selector: 'app-vista-pai',
   standalone: true,
-  imports: [CommonModule],
+  imports: [EstadoObjetivo, CommonModule],
   templateUrl: './vista-pai.html',
   styleUrl: './vista-pai.scss',
 })

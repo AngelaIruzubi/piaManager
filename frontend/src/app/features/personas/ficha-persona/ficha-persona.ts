@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PersonasService } from '../../../core/services/persona.service';
 import { Persona } from '../../../shared/models/persona.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { EstadoActivo } from '../../../shared/components/estado-activo/estado-activo';
 
 @Component({
   selector: 'app-ficha-persona',
   standalone: true,
-  imports: [CommonModule],
+  imports: [EstadoActivo, CommonModule],
   templateUrl: './ficha-persona.html',
   styleUrl: './ficha-persona.scss',
 })

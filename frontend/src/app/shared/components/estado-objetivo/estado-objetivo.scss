@@ -1,0 +1,52 @@
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  width: fit-content;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  // Tamaños: normal (vista del PAI) y grande (cabecera del detalle del objetivo)
+  &.normal {
+    padding: 7px 14px;
+    font-size: 0.92rem;
+
+    svg {
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  &.grande {
+    padding: 9px 18px;
+    font-size: 1rem;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &.estado-conseguido {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+  &.estado-en_proceso {
+    background: var(--amber-bg);
+    color: var(--amber);
+  }
+  &.estado-pendiente {
+    background: var(--gray-bg);
+    color: var(--gray);
+  }
+  &.estado-no_trabajado {
+    background: var(--red-bg);
+    color: var(--red);
+  }
+}

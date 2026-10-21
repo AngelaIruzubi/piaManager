@@ -28,9 +28,7 @@
             </span>
           </td>
           <td>
-            <span class="badge" [class.activo]="usuario.activo" [class.baja]="!usuario.activo">
-              {{ usuario.activo ? 'Activo' : 'Baja' }}
-            </span>
+            <app-estado-activo [activo]="usuario.activo" />
           </td>
           <td>
             <button class="btn-baja" *ngIf="usuario.activo" (click)="darDeBaja(usuario.id, $event)">
