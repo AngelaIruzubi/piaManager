@@ -3,6 +3,8 @@
     <h1>PIA Manager</h1>
     <p>Centro de día — Panel de gestión</p>
 
+    <div class="aviso" role="status" *ngIf="aviso">{{ aviso }}</div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="campo">
         <label for="login-email">Email</label>

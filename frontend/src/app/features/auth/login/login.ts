@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -15,13 +15,19 @@ export class LoginComponent {
   form: FormGroup;
   error = '';
   cargando = false;
+  // Aviso cuando se llega aquí porque la sesión caducó (lo indican el guard y el interceptor)
+  aviso = '';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    route: ActivatedRoute,
   ) {
+    if (route.snapshot.queryParamMap.get('sesion') === 'caducada') {
+      this.aviso = 'Tu sesión ha caducado. Vuelve a entrar.';
+    }
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],

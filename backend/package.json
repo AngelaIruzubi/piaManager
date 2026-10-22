@@ -9,6 +9,8 @@
     "start": "node dist/index.js",
     "seed": "ts-node src/config/seed.ts",
     "seed:prod": "node dist/config/seed.js",
+    "seed:demo": "ts-node src/config/seed-demo.ts",
+    "seed:demo:prod": "node dist/config/seed-demo.js",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/database.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/config/database.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts",
