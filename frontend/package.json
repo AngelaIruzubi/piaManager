@@ -30,5 +30,13 @@
     "prettier": "^3.9.10",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
+  },
+  "//": [
+    "overrides: Angular 21 fija versiones exactas vulnerables de dos dependencias internas (CLI y build).",
+    "Se fuerzan versiones compatibles ya arregladas. Quitar cuando un parche de Angular 21 las incluya."
+  ],
+  "overrides": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "vite": "^7.3.7"
   }
 }
