@@ -4,7 +4,7 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=AngelaIruzubi_piaManager&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AngelaIruzubi_piaManager)
 [![Versión](https://img.shields.io/github/v/release/AngelaIruzubi/piaManager)](https://github.com/AngelaIruzubi/piaManager/releases)
 
-Aplicación web full stack para gestionar **Planes de Atención Individualizada (PAI)** en centros sociales y educativos.
+Aplicación web full stack para gestionar **Plan Individualizado de Atención (PIA)** en centros sociales y educativos.
 
 Nace de mis dos años como educadora social. En los centros, los PAI suelen vivir en documentos sueltos y hojas de cálculo: cuesta saber qué objetivos tiene cada persona, quién trabaja con ella y cómo va avanzando. piaManager reúne en un solo lugar a las personas usuarias, sus planes, sus objetivos y el seguimiento diario del equipo educativo, con pictogramas para que los objetivos también sean comprensibles para la propia persona.
 
