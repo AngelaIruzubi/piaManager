@@ -13,10 +13,12 @@ export class AuthService {
   usuario$ = this.usuarioActual.asObservable();
 
   constructor(private http: HttpClient) {
+    // Al recargar la página se recupera la sesión, pero solo si el token sigue siendo válido
     const token = localStorage.getItem(this.tokenKey);
-    if (token) {
-      const datos = this.decodificarToken(token);
-      this.usuarioActual.next(datos);
+    if (token && this.tokenVigente(token)) {
+      this.usuarioActual.next(this.decodificarToken(token));
+    } else {
+      localStorage.removeItem(this.tokenKey);
     }
   }
 
@@ -41,8 +43,10 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  // Hay sesión si hay token y no ha caducado (el backend lo rechazaría con un 401)
   estaAutenticado(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && this.tokenVigente(token);
   }
 
   getRol(): string | null {
@@ -53,13 +57,34 @@ export class AuthService {
     return this.getRol() === 'coordinador';
   }
 
+  private tokenVigente(token: string): boolean {
+    const payload = this.leerPayload(token);
+    if (!payload) return false;
+    // exp viene en segundos desde 1970; Date.now() en milisegundos
+    return payload.exp === undefined || payload.exp * 1000 > Date.now();
+  }
+
+  // El payload del JWT va en base64url y en UTF-8: hay que descodificarlo así para que
+  // los nombres con tilde (Lucía) no salgan mal. Si el token está mal formado, devuelve null
+  private leerPayload(
+    token: string,
+  ): { rol: string; nombre?: string; apellidos?: string; exp?: number } | null {
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    } catch {
+      return null;
+    }
+  }
+
   private decodificarToken(token: string): LoginResponse {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = this.leerPayload(token);
     return {
       token,
-      rol: payload.rol,
-      nombre: payload.nombre ?? '',
-      apellidos: payload.apellidos ?? '',
+      rol: payload?.rol ?? '',
+      nombre: payload?.nombre ?? '',
+      apellidos: payload?.apellidos ?? '',
     };
   }
 }

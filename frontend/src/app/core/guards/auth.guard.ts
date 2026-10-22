@@ -10,5 +10,8 @@ export const authGuard = () => {
     return true;
   }
 
-  return router.createUrlTree(['/login']);
+  // Si había un token pero ya no vale, la sesión ha caducado: se limpia y se avisa en el login
+  const caducada = authService.getToken() !== null;
+  authService.logout();
+  return router.createUrlTree(['/login'], caducada ? { queryParams: { sesion: 'caducada' } } : {});
 };
