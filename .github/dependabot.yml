@@ -22,6 +22,10 @@ updates:
       # Todas las actualizaciones compatibles (minor y patch) en un único PR por semana
       backend-menores:
         update-types: [minor, patch]
+    ignore:
+      # TypeScript mayor (p. ej. 7, compilador reescrito): rompe ts-node y Jest; se prueba a mano
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: npm
     directory: /frontend
@@ -38,6 +42,10 @@ updates:
       # Las versiones mayores de Angular se actualizan a mano con "ng update"
       - dependency-name: "@angular/*"
         update-types: [version-update:semver-major]
+      # Cada versión de Angular exige una versión concreta de TypeScript (Angular 21 → TypeScript 5.9):
+      # TypeScript sube junto con Angular, con "ng update"
+      - dependency-name: typescript
+        update-types: [version-update:semver-major, version-update:semver-minor]
 
   - package-ecosystem: npm
     directory: /
@@ -58,6 +66,11 @@ updates:
     commit-message:
       prefix: fix
       include: scope
+    ignore:
+      # Node se mantiene en la versión LTS (24), la misma del CI y de desarrollo; el salto de LTS se
+      # hace a mano en todo el proyecto a la vez. Sí llegan los parches de la imagen node:24-alpine
+      - dependency-name: node
+        update-types: [version-update:semver-major]
 
   # Acciones del CI: checkout, setup-node, build-push-action, trivy-action, sonarqube-scan-action...
   - package-ecosystem: github-actions
