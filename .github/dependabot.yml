@@ -62,6 +62,11 @@ updates:
     groups:
       raiz-menores:
         update-types: [minor, patch]
+    ignore:
+      # La versión 10 del preset necesita conventional-changelog-writer 9, y semantic-release 25 usa
+      # la 8: con la 10 deja de generar las notas de la Release. Sube junto con semantic-release
+      - dependency-name: conventional-changelog-conventionalcommits
+        update-types: [version-update:semver-major]
 
   # Imágenes base: node:24-alpine (backend) y nginx-unprivileged (frontend)
   - package-ecosystem: docker
