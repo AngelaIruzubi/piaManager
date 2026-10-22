@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -58,7 +58,7 @@ jobs:
     steps:
       # Todo el historial: SonarQube lo necesita para saber qué líneas son nuevas en cada PR
       - name: Checkout del código (historial completo)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -82,10 +82,10 @@ jobs:
 
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -114,10 +114,10 @@ jobs:
 
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -156,14 +156,14 @@ jobs:
 
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Preparar Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Iniciar sesión en GitHub Container Registry
         if: env.PUBLICAR == 'true'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -172,7 +172,7 @@ jobs:
       # Etiquetas: "latest" (solo en main) y el SHA del commit, para saber qué código lleva cada imagen
       - name: Calcular nombre y etiquetas de la imagen
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository_owner }}/pia-${{ matrix.servicio }}
           tags: |
@@ -182,7 +182,7 @@ jobs:
       # La imagen se construye primero en la máquina del CI (load) para que Trivy pueda revisarla por dentro.
       # pull: descarga siempre la versión más reciente de la imagen base (con sus últimos parches)
       - name: Construir la imagen para escanearla
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./${{ matrix.servicio }}
           pull: true
@@ -222,7 +222,7 @@ jobs:
           category: imagen-${{ matrix.servicio }}
 
       - name: Construir (y publicar en main)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./${{ matrix.servicio }}
           pull: true
@@ -253,12 +253,12 @@ jobs:
     steps:
       # Todo el historial y las etiquetas: semantic-release busca la última versión y los commits desde entonces
       - name: Checkout del código (historial completo)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -282,7 +282,7 @@ jobs:
 
       - name: Iniciar sesión en GitHub Container Registry
         if: steps.version.outputs.tag != ''
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
