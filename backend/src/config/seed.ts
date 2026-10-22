@@ -43,20 +43,26 @@ AppDataSource.initialize().then(async () => {
     }
   }
 
-  // Coordinadora inicial
+  // Coordinadora inicial. La contraseña viene del entorno (ADMIN_PASSWORD), nunca del código:
+  // así no hay una contraseña conocida por todos en cada instalación
   const usuarioRepo = AppDataSource.getRepository(Usuario);
-  const admin = await usuarioRepo.findOneBy({ email: 'admin@pia.com' });
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@pia.com';
+  const admin = await usuarioRepo.findOneBy({ email: adminEmail });
   if (!admin) {
-    const hash = await bcrypt.hash('admin123', 10);
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword || adminPassword.length < 8) {
+      throw new Error('Falta ADMIN_PASSWORD en el .env (mínimo 8 caracteres) para crear la coordinadora inicial');
+    }
+    const hash = await bcrypt.hash(adminPassword, 10);
     await usuarioRepo.save(usuarioRepo.create({
       nombre: 'Coordinadora',
       apellidos: 'Principal',
-      email: 'admin@pia.com',
+      email: adminEmail,
       password: hash,
       rol: 'coordinador',
       activo: true,
     }));
-    console.log('✅ Coordinadora inicial creada: admin@pia.com / admin123');
+    console.log(`✅ Coordinadora inicial creada: ${adminEmail} (contraseña: la de ADMIN_PASSWORD)`);
   } else {
     console.log('⏭️  Coordinadora ya existe');
   }

@@ -129,7 +129,7 @@ erDiagram
 
 ## Seguridad
 
-- **Autenticación**: contraseñas cifradas con **bcrypt** y sesión con **JWT**. Los usuarios dados de baja no pueden entrar. El backend no arranca si falta `JWT_SECRET`.
+- **Autenticación**: contraseñas cifradas con **bcrypt** y sesión con **JWT**. Los usuarios dados de baja no pueden entrar. El backend no arranca si falta `JWT_SECRET`, y la contraseña de la coordinadora inicial se toma del `.env` (`ADMIN_PASSWORD`): no hay contraseñas por defecto en el código.
 - **Autorización por rol**: el middleware `soloCoordinador` protege los endpoints de coordinación en el backend. En el frontend, los guards ocultan las pantallas, pero la protección real está en el servidor.
 - **Autorización por recurso (contra IDOR)**: un educador solo puede ver y tocar a las personas que tiene asignadas. El middleware `accesoPersona` sube por la jerarquía (seguimiento → objetivo → área → PAI → persona) para comprobarlo en cada petición, aunque se cambie el id en la URL.
 - **Validación de entrada**: cada cuerpo de petición se valida con un DTO de **class-validator** en modo lista blanca. Los campos que no están en el DTO se rechazan con un 400, así nadie puede colar en la petición datos que la pantalla no envía, como un `id` o una fecha de creación (*mass assignment*).
@@ -192,7 +192,8 @@ Solo hace falta [Docker](https://www.docker.com/products/docker-desktop/).
 git clone https://github.com/AngelaIruzubi/piaManager.git
 cd piaManager
 
-# Variables: contraseña de la base de datos y clave de los JWT (cambia los valores)
+# Variables: contraseña de la base de datos, clave de los JWT y contraseña
+# de la coordinadora inicial (cambia los valores)
 cp .env.example .env
 
 # Construye y arranca base de datos, backend y frontend
@@ -201,9 +202,12 @@ docker compose up -d --build
 
 # Solo la primera vez: catálogos y usuaria coordinadora inicial
 docker compose exec backend node dist/config/seed.js
+
+# Opcional: un centro de demo con personas, PAI, objetivos y seguimientos inventados
+docker compose exec backend node dist/config/seed-demo.js
 ```
 
-Abre **http://localhost:8080** y entra con `admin@pia.com` / `admin123`.
+Abre **http://localhost:8080** y entra con uno de los [usuarios de demo](#usuarios-de-demo), o, si no has cargado la demo, con `admin@pia.com` y la contraseña que pusiste en `ADMIN_PASSWORD`.
 
 Para pararlo: `docker compose down` (los datos se conservan en el volumen `pia_db_data`).
 
@@ -227,7 +231,18 @@ npm run dev:db
 ```
 
 - Frontend: **http://localhost:4200** · API: **http://localhost:3000/api**
-- Solo la primera vez, en otra terminal: `npm run seed --prefix backend`
+- Solo la primera vez, en otra terminal: `npm run seed --prefix backend` y, si quieres la demo, `npm run seed:demo --prefix backend`
+
+### Usuarios de demo
+
+Los crea el seed de demo (`backend/src/config/seed-demo.ts`). Todos los datos son inventados.
+
+| Rol | Email | Contraseña | Qué ve |
+|---|---|---|---|
+| Coordinación | `coordinacion@example.com` | `demo1234` | Las 4 personas usuarias y la gestión del equipo |
+| Educador | `educador@example.com` | `demo1234` | Solo sus 2 personas asignadas (Daniel e Irene) |
+
+Hay una persona con un PAI activo y completo (Daniel), otra con un PAI más corto (Irene), una con el PAI en borrador (Óscar) y una sin PAI (Nuria), para probar todos los casos.
 
 ## Tests
 
@@ -282,7 +297,7 @@ piaManager/
 ## Próximos pasos
 
 - [ ] Despliegue con URL pública y usuarios de demo de los dos roles.
-- [ ] Datos de demo ficticios y capturas de pantalla en este README.
+- [ ] Capturas de pantalla en este README (con los datos de demo).
 - [ ] Sesión más robusta: comprobar la caducidad del token y volver al login ante un 401.
 - [ ] Tests de integración de la API con Supertest (login, permisos, validación).
 - [ ] Tests del frontend (guards, interceptor y servicio de autenticación) y su cobertura en SonarQube.
