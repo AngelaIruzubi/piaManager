@@ -26,10 +26,10 @@
     "@angular/build": "^21.2.27",
     "@angular/cli": "^21.2.27",
     "@angular/compiler-cli": "^21.2.25",
-    "jsdom": "^30.1.3",
+    "jsdom": "^28.0.0",
     "prettier": "^3.9.10",
     "typescript": "~5.9.2",
-    "vitest": "^5.0.5"
+    "vitest": "^4.0.8"
   },
   "//": [
     "overrides: Angular 21 fija versiones exactas vulnerables de dos dependencias internas (CLI y build).",

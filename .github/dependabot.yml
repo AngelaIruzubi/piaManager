@@ -46,6 +46,11 @@ updates:
       # TypeScript sube junto con Angular, con "ng update"
       - dependency-name: typescript
         update-types: [version-update:semver-major, version-update:semver-minor]
+      # @angular/build 21 solo admite Vitest 4; jsdom va con Vitest. Suben junto con Angular
+      - dependency-name: vitest
+        update-types: [version-update:semver-major]
+      - dependency-name: jsdom
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: npm
     directory: /
