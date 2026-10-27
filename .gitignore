@@ -159,3 +159,6 @@ build/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Datos de PostgreSQL de docker-compose.prod.yml al probarlo en local (¡nunca a git!)
+datos/
