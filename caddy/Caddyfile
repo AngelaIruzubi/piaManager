@@ -1,0 +1,14 @@
+# Caddy: la única puerta de entrada al servidor. Pide y renueva solo el certificado HTTPS
+# (Let's Encrypt) para el dominio de DOMINIO y pasa /api al backend.
+# En local, con DOMINIO=localhost, usa un certificado de pruebas propio.
+{$DOMINIO} {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy backend:3000
+	}
+
+	handle {
+		respond "No encontrado" 404
+	}
+}

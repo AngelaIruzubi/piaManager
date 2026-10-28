@@ -4,6 +4,7 @@
 #
 # No construye nada: usa las imágenes ya publicadas por el CI en GHCR, con la versión fija de VERSION.
 # El frontend no está aquí: lo sirve Vercel, que reenvía /api a este servidor.
+# Solo Caddy publica puertos (80 y 443); la base de datos y el backend quedan en la red interna.
 name: piamanager-prod
 
 services:
@@ -61,4 +62,23 @@ services:
       retries: 3
       start_period: 30s
       start_interval: 2s
+    logging: *logs
+
+  # Caddy: la única puerta abierta a internet. HTTPS automático (Let's Encrypt) y /api → backend
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    environment:
+      DOMINIO: ${DOMINIO:-localhost}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Certificados HTTPS: en el Volume, para no volver a pedirlos a Let's Encrypt al recrear el servidor
+      - ${DATOS_DIR:-./datos}/caddy:/data
+    depends_on:
+      backend:
+        condition: service_healthy
     logging: *logs
