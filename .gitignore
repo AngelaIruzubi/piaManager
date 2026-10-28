@@ -69,6 +69,7 @@ web_modules/
 .env
 .env.*
 !.env.example
+!.env.prod.example
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -159,3 +160,6 @@ build/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Datos de PostgreSQL de docker-compose.prod.yml al probarlo en local (¡nunca a git!)
+datos/

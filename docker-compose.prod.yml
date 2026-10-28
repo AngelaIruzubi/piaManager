@@ -1,0 +1,84 @@
+# piaManager en producción (servidor de Hetzner). Para desarrollo, usa docker-compose.yml
+#   docker compose -f docker-compose.prod.yml --env-file .env up -d   → arranca
+#   docker compose -f docker-compose.prod.yml down                     → apaga (los datos se conservan)
+#
+# No construye nada: usa las imágenes ya publicadas por el CI en GHCR, con la versión fija de VERSION.
+# El frontend no está aquí: lo sirve Vercel, que reenvía /api a este servidor.
+# Solo Caddy publica puertos (80 y 443); la base de datos y el backend quedan en la red interna.
+name: piamanager-prod
+
+services:
+
+  # Base de datos. Sin puertos publicados: solo el backend llega a ella, por la red interna de Docker
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER en el .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en el .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Falta POSTGRES_DB en el .env}
+    volumes:
+      # Los datos van en una carpeta del servidor: en Hetzner, la del Volume (un disco aparte que
+      # sobrevive aunque se destruya el servidor). En local, ./datos
+      - ${DATOS_DIR:-./datos}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging: &logs
+      # Como mucho 3 archivos de 10 MB por servicio: los logs nunca llenan el disco
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # API en Node. Sin puertos publicados: desde fuera solo se llega a través de Caddy (HTTPS)
+  backend:
+    image: ghcr.io/angelairuzubi/pia-backend:${VERSION:?Falta VERSION en el .env (por ejemplo 1.1.0)}
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET:?Falta JWT_SECRET en el .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      # El frontend real. Vercel reenvía /api desde su servidor, así que el navegador no hace
+      # peticiones de otro origen; aun así, CORS solo admite este
+      CORS_ORIGIN: https://piamanager.vercel.app
+      # Solo los usa el seed para crear la coordinadora inicial
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@pia.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 2s
+    logging: *logs
+
+  # Caddy: la única puerta abierta a internet. HTTPS automático (Let's Encrypt) y /api → backend
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    environment:
+      DOMINIO: ${DOMINIO:-localhost}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Certificados HTTPS: en el Volume, para no volver a pedirlos a Let's Encrypt al recrear el servidor
+      - ${DATOS_DIR:-./datos}/caddy:/data
+    depends_on:
+      backend:
+        condition: service_healthy
+    logging: *logs
