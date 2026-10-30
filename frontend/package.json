@@ -36,7 +36,7 @@
     "Se fuerzan versiones compatibles ya arregladas. Quitar cuando un parche de Angular 21 las incluya."
   ],
   "overrides": {
-    "@modelcontextprotocol/sdk": "^1.32.1",
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "vite": "^7.3.7"
   }
 }
