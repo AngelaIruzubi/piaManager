@@ -1,0 +1,12 @@
+# Plugins descargados por terraform init (se regeneran)
+.terraform/
+
+# Estado: puede contener IPs y datos sensibles. Nunca se sube
+*.tfstate
+*.tfstate.*
+
+# Valores de variables y planes guardados
+*.tfvars
+*.tfplan
+
+# El .terraform.lock.hcl SÍ se sube: fija la versión exacta del proveedor (como package-lock.json)

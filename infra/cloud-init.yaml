@@ -1,0 +1,45 @@
+#cloud-config
+# Primera puesta en marcha del servidor (solo se ejecuta en el primer arranque).
+# Es una plantilla: Terraform sustituye la clave SSH y el id del Volume antes de enviarla.
+
+# --- Usuario de trabajo: deploy (nunca root) ---
+users:
+  - name: deploy
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL" # puede usar sudo (no tiene contraseña: solo entra con clave)
+    ssh_authorized_keys:
+      - ${clave_ssh}
+
+# --- SSH endurecido: ni root ni contraseñas ---
+disable_root: true
+ssh_pwauth: false
+write_files:
+  # Refuerzo en la configuración del propio servidor SSH (se aplica al reiniciarlo en runcmd)
+  - path: /etc/ssh/sshd_config.d/10-endurecido.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+
+# --- Sistema al día y programas ---
+package_update: true
+package_upgrade: true
+packages:
+  - docker.io
+  - docker-compose-v2
+  - unattended-upgrades # parches de seguridad automáticos
+
+# --- Comandos al final del primer arranque ---
+runcmd:
+  - systemctl restart ssh
+  # deploy puede usar docker sin sudo
+  - usermod -aG docker deploy
+  # Carpeta para el compose y el .env (Fase D)
+  - install -d -o deploy -g deploy /opt/piamanager
+  # Montar el Volume en /mnt/datos. Espera a que Hetzner lo conecte (el "cable" se crea
+  # justo después del servidor) y lo añade a /etc/fstab para que se monte en cada reinicio
+  - |
+    DISCO=/dev/disk/by-id/scsi-0HC_Volume_${volumen_id}
+    for i in $(seq 1 60); do [ -e "$DISCO" ] && break; sleep 5; done
+    mkdir -p /mnt/datos
+    echo "$DISCO /mnt/datos ext4 discard,nofail,defaults 0 0" >> /etc/fstab
+    mount /mnt/datos
