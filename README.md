@@ -10,6 +10,8 @@ Nace de mis dos años como educadora social. En los centros, los PAI suelen vivi
 
 **Angular 21 · Node.js 24 + Express 5 · TypeScript · PostgreSQL 16 · Docker · GitHub Actions**
 
+**🔗 Demo en vivo: https://piamanager.vercel.app** · usuarios de prueba en [Usuarios de demo](#usuarios-de-demo)
+
 ---
 
 ## Contenido
@@ -20,6 +22,7 @@ Nace de mis dos años como educadora social. En los centros, los PAI suelen vivi
 - [Modelo de datos](#modelo-de-datos)
 - [Seguridad](#seguridad)
 - [Calidad y DevOps](#calidad-y-devops)
+- [Despliegue](#despliegue)
 - [Puesta en marcha](#puesta-en-marcha)
 - [Tests](#tests)
 - [Decisiones técnicas](#decisiones-técnicas)
@@ -182,6 +185,31 @@ docker pull ghcr.io/angelairuzubi/pia-frontend:latest
 
 `main` está protegida: solo se puede fusionar un PR si pasan los tests, el build y la construcción de las dos imágenes.
 
+## Despliegue
+
+La demo está repartida entre dos sitios: **Vercel** sirve el frontend y un servidor en **Hetzner Cloud** ejecuta la API y la base de datos. Vercel reenvía las peticiones `/api` al servidor, así que el navegador solo habla con un origen y no hace falta CORS.
+
+```mermaid
+flowchart LR
+    U([Navegador]) -->|"https://piamanager.vercel.app"| V["<b>Vercel</b><br/>Angular compilado"]
+    V -->|"/api"| C
+
+    subgraph Hetzner["Servidor Hetzner · Docker Compose"]
+        C["<b>Caddy</b><br/>HTTPS automático"]
+        B["<b>backend</b><br/>imagen versionada de GHCR"]
+        D[("<b>db</b><br/>PostgreSQL 16")]
+        C --> B --> D
+    end
+
+    D -.->|datos| VOL[("Volume<br/>/mnt/datos")]
+```
+
+- **Infraestructura como código:** el servidor, su IP fija, el firewall (solo puertos 22, 80 y 443) y el disco de datos se crean con **Terraform** (carpeta [`infra/`](infra/)).
+- **Configuración automática:** al arrancar por primera vez, **cloud-init** crea un usuario sin acceso de root, solo con clave SSH, instala Docker y monta el disco de datos.
+- **Datos a salvo:** PostgreSQL guarda sus datos en un **Volume** aparte, protegido contra borrados, así que se puede recrear el servidor sin perderlos.
+- **Versiones:** el servidor usa la imagen del backend con el número de versión que publica semantic-release (`docker-compose.prod.yml`), no `latest`. Así se sabe siempre qué versión está en producción.
+- Por ahora el despliegue de cada versión es manual; el siguiente paso es automatizarlo desde el CI.
+
 ## Puesta en marcha
 
 ### Opción A: todo con Docker (recomendada)
@@ -235,7 +263,7 @@ npm run dev:db
 
 ### Usuarios de demo
 
-Los crea el seed de demo (`backend/src/config/seed-demo.ts`). Todos los datos son inventados.
+Sirven para la [demo en vivo](https://piamanager.vercel.app) y para tu copia en local si cargas el seed de demo (`backend/src/config/seed-demo.ts`). Todos los datos son inventados.
 
 | Rol | Email | Contraseña | Qué ve |
 |---|---|---|---|
@@ -296,9 +324,11 @@ piaManager/
 
 ## Próximos pasos
 
-- [ ] Despliegue con URL pública y usuarios de demo de los dos roles.
+- [x] Despliegue con URL pública y usuarios de demo de los dos roles.
+- [ ] Despliegue automático (CD): al publicar una versión, actualizar el servidor y Vercel desde el CI.
+- [ ] Copias de seguridad diarias de la base de datos y reinicio nocturno de la demo.
 - [ ] Capturas de pantalla en este README (con los datos de demo).
-- [ ] Sesión más robusta: comprobar la caducidad del token y volver al login ante un 401.
+- [x] Sesión más robusta: comprobar la caducidad del token y volver al login ante un 401.
 - [ ] Tests de integración de la API con Supertest (login, permisos, validación).
 - [ ] Tests del frontend (guards, interceptor y servicio de autenticación) y su cobertura en SonarQube.
 - [ ] Terminar la migración a signals y al nuevo control de flujo de Angular.
