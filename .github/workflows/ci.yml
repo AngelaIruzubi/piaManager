@@ -240,6 +240,8 @@ jobs:
     needs: [ backend, frontend, librerias, docker ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.tag }}
     # Nunca dos versiones a la vez (por ejemplo, si se fusionan dos PRs seguidos)
     concurrency:
       group: release
@@ -303,3 +305,62 @@ jobs:
             docker buildx imagetools create -t "$IMAGEN:$VERSION" -t "$IMAGEN:$MENOR" "$IMAGEN:$ORIGEN"
             echo "$IMAGEN:$ORIGEN → $VERSION y $MENOR"
           done
+
+  deploy:
+    name: Despliegue a producción
+    needs: [ release ]
+    if: needs.release.outputs.version != ''
+    runs-on: ubuntu-latest
+    environment:
+      name: produccion
+      url: https://piamanager.vercel.app
+    concurrency:
+      group: despliegue
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v7
+
+      - name: Preparar SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Desplegar el backend
+        env:
+          TAG: ${{ needs.release.outputs.version }}
+          DESTINO: ${{ vars.SERVIDOR_USUARIO }}@${{ vars.SERVIDOR_IP }}
+        run: |
+          VERSION="${TAG#v}"
+          ssh "$DESTINO" "cd /opt/piamanager \
+            && sed -i 's/^VERSION=.*/VERSION=$VERSION/' .env \
+            && docker compose -f docker-compose.prod.yml --env-file .env pull backend \
+            && docker compose -f docker-compose.prod.yml --env-file .env up -d --wait \
+            && docker image prune -f"
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Desplegar el frontend en Vercel
+        working-directory: frontend
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm install --global vercel@65.9.0
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+
+      - name: Comprobar que la demo responde
+        run: curl --fail --silent --show-error --retry 5 --retry-delay 5 https://piamanager.vercel.app/api/health
