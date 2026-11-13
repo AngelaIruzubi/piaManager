@@ -150,7 +150,7 @@ erDiagram
 
 ## Calidad y DevOps
 
-Cada pull request pasa por el CI de GitHub Actions. Al fusionar en `main`, el CI publica las imágenes Docker y, si hay cambios funcionales, crea una versión nueva sin intervención manual.
+Cada pull request pasa por el CI de GitHub Actions. Al fusionar en `main`, el CI publica las imágenes Docker y, si hay cambios funcionales, crea una versión nueva y la despliega en producción tras una aprobación manual.
 
 ```mermaid
 flowchart LR
@@ -163,6 +163,7 @@ flowchart LR
     DK -->|merge a main| G["GHCR<br/>imágenes latest y sha"]
     G --> R["semantic-release<br/>versión vX.Y.Z y Release"]
     R --> V["Imágenes<br/>X.Y.Z y X.Y"]
+    V -->|aprobación manual| DP["Despliegue<br/>Hetzner + Vercel"]
 ```
 
 | Herramienta | Qué comprueba |
@@ -208,7 +209,7 @@ flowchart LR
 - **Configuración automática:** al arrancar por primera vez, **cloud-init** crea un usuario sin acceso de root, solo con clave SSH, instala Docker y monta el disco de datos.
 - **Datos a salvo:** PostgreSQL guarda sus datos en un **Volume** aparte, protegido contra borrados, así que se puede recrear el servidor sin perderlos.
 - **Versiones:** el servidor usa la imagen del backend con el número de versión que publica semantic-release (`docker-compose.prod.yml`), no `latest`. Así se sabe siempre qué versión está en producción.
-- Por ahora el despliegue de cada versión es manual; el siguiente paso es automatizarlo desde el CI.
+- **Despliegue continuo con aprobación:** cuando semantic-release publica una versión, el job `deploy` del CI espera la aprobación del environment `produccion` de GitHub. Después actualiza `VERSION` en el servidor por SSH, con una clave exclusiva del CI y la huella del servidor fijada, y recrea el backend esperando a sus healthchecks. Luego compila y publica el frontend en Vercel y comprueba `/api/health` de extremo a extremo.
 
 ## Puesta en marcha
 
@@ -325,7 +326,7 @@ piaManager/
 ## Próximos pasos
 
 - [x] Despliegue con URL pública y usuarios de demo de los dos roles.
-- [ ] Despliegue automático (CD): al publicar una versión, actualizar el servidor y Vercel desde el CI.
+- [x] Despliegue automático (CD): al publicar una versión, actualizar el servidor y Vercel desde el CI.
 - [ ] Copias de seguridad diarias de la base de datos y reinicio nocturno de la demo.
 - [ ] Capturas de pantalla en este README (con los datos de demo).
 - [x] Sesión más robusta: comprobar la caducidad del token y volver al login ante un 401.
